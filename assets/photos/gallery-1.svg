@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700">
+  <rect width="900" height="700" fill="#fffff0" />
+  <circle cx="220" cy="260" r="160" fill="#d8b7bf" opacity="0.5" />
+  <circle cx="620" cy="420" r="180" fill="#f4e3e7" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="54" fill="#5f5358">Gallery</text>
+</svg>

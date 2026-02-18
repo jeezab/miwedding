@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+  <rect width="900" height="1200" fill="#fffff0" />
+  <circle cx="650" cy="250" r="180" fill="#f4e3e7" />
+  <circle cx="260" cy="720" r="220" fill="#d8b7bf" opacity="0.6" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="64" fill="#5f5358">Photo</text>
+</svg>

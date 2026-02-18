@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="only light" />
+  <meta name="supported-color-schemes" content="light" />
+  <meta name="theme-color" content="#fffff0" />
+  <title>Свадебное приглашение</title>
+  <meta name="description" content="Свадебное приглашение" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <section class="intro-splash" id="intro-splash" role="dialog" aria-modal="true" aria-label="Заставка приглашения" tabindex="0">
+    <div class="intro-stage" id="intro-stage">
+      <div class="intro-map-shell" id="intro-map-shell" aria-hidden="true">
+        <canvas class="intro-stars-canvas" id="intro-stars-canvas"></canvas>
+      </div>
+      <div class="intro-copy">
+        <p class="intro-title-line" id="intro-title-line1">ВАС ХОТЯТ КОЕ-КУДА</p>
+        <p class="intro-title-line intro-title-line-2" id="intro-title-line2">ПРИГЛАСИТЬ</p>
+        <p class="intro-meta" id="intro-coords">55°54'5"N 37°49'35"E</p>
+        <p class="intro-meta" id="intro-date">26 АПРЕЛЯ 2026 ГОДА</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <main>
+    <section class="screen-block hero reveal" id="hero">
+      <div class="container">
+        <div class="hero-shell panel">
+          <p class="hero-kicker">Wedding Day</p>
+          <div class="hero-photo-stack" aria-hidden="true">
+            <figure class="polaroid polaroid-left">
+              <img src="фоточки/волыну опусти.jpg" alt="" />
+            </figure>
+            <figure class="polaroid polaroid-right">
+              <img src="фоточки/леф.jpg" alt="" />
+            </figure>
+          </div>
+          <h1 class="hero-title" id="hero-names">Игорь и Маргарита</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen-block story reveal" id="story">
+      <div class="container">
+        <div class="story-shell">
+          <div class="story-left">
+            <div class="story-copy">
+              <h2 id="story-title">Наша история</h2>
+              <p id="story-text">Мы любим друг друга и решили стать мужем и женой. Будем счастливы разделить этот день с вами.</p>
+            </div>
+            <div class="story-bottom">
+              <div class="hero-meta">
+                <span id="hero-date">26 апреля 2026 г.</span>
+                <span class="hero-dot">✦</span>
+                <span id="hero-time">16:00</span>
+              </div>
+              <div class="hero-actions">
+                <a class="button button-primary" href="#rsvp">Подтвердить присутствие</a>
+                <a class="button button-outline" href="#location">Как добраться</a>
+              </div>
+            </div>
+          </div>
+          <div class="story-media">
+            <img id="story-photo" src="фоточки/пипипи.png" alt="Фото пары" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen-block date-block reveal" id="date">
+      <div class="container">
+        <div class="date-card panel">
+          <h2 class="date-title">Мы ждем вас</h2>
+          <div class="calendar-wrap" aria-label="Календарь свадьбы">
+            <div class="calendar-header" id="calendar-month">апрель 2026</div>
+            <div class="calendar-weekdays">
+              <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+          </div>
+          <p class="date-text" id="date-text">Не пропустите важное событие весны - день нашей свадьбы.</p>
+          <div class="date-line">
+            <span id="date-full">26 апреля 2026</span>
+            <span>/</span>
+            <span id="date-time">16:00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen-block location reveal" id="location">
+      <div class="container">
+        <div class="location-shell panel">
+          <div class="location-copy">
+            <h2 id="location-title">Место проведения</h2>
+            <p id="location-subtitle">Собираемся на красивой площадке, все детали ниже.</p>
+            <p class="location-address" id="location-address">Королёв, мкр. Юбилейный, ул. М. К. Тихонравова, 17А</p>
+            <p class="location-time" id="location-time">Сбор гостей в 15:30</p>
+            <a class="button button-primary" id="location-route" href="#" target="_blank" rel="noopener">Как добраться</a>
+          </div>
+          <div class="map-frame">
+            <iframe id="location-map" title="Карта проезда" src="" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-bridge" id="video-bridge">
+      <video class="video-bridge-bg" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+        <source src="фоточки/ручки в небе.mp4" type="video/mp4" />
+      </video>
+      <div class="video-bridge-overlay" aria-hidden="true"></div>
+      <div class="video-bridge-inner">
+        <section class="screen-block timeline reveal video-bridge-block" id="timeline">
+          <div class="container">
+            <div class="timeline-shell panel">
+              <h2>Тайминг</h2>
+              <div class="timeline-grid" id="timeline-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="narrow-block countdown video-bridge-block" id="countdown">
+          <div class="container">
+            <div class="countdown-shell panel">
+              <div class="countdown-content reveal">
+                <h2>До нашей свадьбы осталось</h2>
+                <div class="countdown-grid">
+                  <div class="countdown-card"><span class="count-num" id="count-days">0</span><span class="count-label">дней</span></div>
+                  <span class="count-sep" aria-hidden="true">/</span>
+                  <div class="countdown-card"><span class="count-num" id="count-hours">0</span><span class="count-label">часов</span></div>
+                  <span class="count-sep" aria-hidden="true">/</span>
+                  <div class="countdown-card"><span class="count-num" id="count-mins">0</span><span class="count-label">минут</span></div>
+                  <span class="count-sep" aria-hidden="true">/</span>
+                  <div class="countdown-card"><span class="count-num" id="count-secs">0</span><span class="count-label">секунд</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+    <section class="screen-block wishes reveal video-bridge-block" id="wishes">
+      <div class="container">
+        <div class="wishes-shell panel">
+          <div class="wishes-copy">
+            <h2 id="wishes-title">Пожелания</h2>
+            <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
+            <div class="wishes-nav" aria-label="Переключение слайдов пожеланий">
+              <button class="wishes-arrow" id="wishes-prev" type="button" aria-label="Предыдущий слайд">&lt;</button>
+              <button class="wishes-arrow" id="wishes-next" type="button" aria-label="Следующий слайд">&gt;</button>
+            </div>
+          </div>
+          <div class="wishes-side">
+            <div class="contacts-copy wishes-pane is-active" id="wishes-pane-contacts">
+              <h2>Контакты</h2>
+              <div class="contacts-grid" id="contacts-grid"></div>
+            </div>
+            <div class="dresscode-copy wishes-pane" id="wishes-pane-dresscode">
+              <h2></h2>
+              <div class="dresscode-carousel" id="dresscode-carousel">
+                <div class="dresscode-track" id="dresscode-track"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+      </div>
+    </section>
+
+    <section class="screen-block rsvp reveal" id="rsvp">
+      <div class="container">
+        <div class="rsvp-shell panel">
+          <div class="rsvp-head">
+            <h2>Анкета гостя</h2>
+            <p>Пожалуйста, заполните анкету до <span id="rsvp-deadline">10 июня 2026</span>.</p>
+          </div>
+          <form class="rsvp-form" id="rsvp-form" novalidate>
+            <div class="field">
+              <label for="guestName">Имя и фамилия</label>
+              <input type="text" id="guestName" name="guestName" placeholder="Ваше имя" required />
+            </div>
+            <fieldset class="field">
+              <legend>Сможете ли вы прийти?</legend>
+              <label class="choice"><input type="radio" name="attendance" value="yes" required /> Да, с радостью</label>
+              <label class="choice"><input type="radio" name="attendance" value="no" required /> К сожалению, не смогу</label>
+            </fieldset>
+            <fieldset class="field">
+              <legend>Предпочтения по напиткам</legend>
+              <label class="choice"><input type="checkbox" name="drinks" value="Не пью" /> Не пью</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Шампанское" /> Шампанское</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Красное вино" /> Красное вино</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Белое вино" /> Белое вино</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Водка" /> Водка</label>
+              <label class="choice"><input type="checkbox" name="drinks" value="Коньяк" /> Коньяк</label>
+            </fieldset>
+            <div class="field">
+              <label for="wish">Пожелание молодоженам</label>
+              <textarea id="wish" name="wish" rows="3" placeholder="Ваши теплые слова"></textarea>
+            </div>
+            <div class="field honeypot" aria-hidden="true">
+              <label for="company">Компания</label>
+              <input type="text" id="company" name="company" autocomplete="off" tabindex="-1" />
+            </div>
+            <button class="button button-primary" type="submit" id="rsvp-submit">Отправить</button>
+            <p class="form-status" id="form-status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">С любовью, <span id="footer-names">Игорь и Маргарита</span></div>
+    </div>
+  </footer>
+
+  <script src="scripts/config.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+  <rect width="900" height="1200" fill="#fffdfa" />
+  <rect x="120" y="140" width="660" height="920" rx="80" fill="#f4e3e7" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="60" fill="#5f5358">Story</text>
+</svg>
