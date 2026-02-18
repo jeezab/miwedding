@@ -104,6 +104,7 @@
     let isTransitioning = false;
     let warpStartedAt = 0;
     const cleanupFns = [];
+    const sparkleNodes = new Set();
 
     const state = {
       cx: 0,
@@ -173,6 +174,7 @@
     };
 
     const onPointerMove = (event) => {
+      if (event.pointerType && event.pointerType !== "mouse") return;
       const rect = splash.getBoundingClientRect();
       const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       const ny = ((event.clientY - rect.top) / rect.height) * 2 - 1;
@@ -198,17 +200,54 @@
       cleanupFns.push(() => window.removeEventListener("deviceorientation", onOrientation));
     }
 
-    const onTouchMove = (event) => {
-      if (gotGyroSignal) return;
-      const touch = event.touches && event.touches[0];
+    let lastSparkleTime = 0;
+    const spawnSparkles = (touch) => {
       if (!touch) return;
-      const rect = splash.getBoundingClientRect();
-      const nx = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
-      setParallax(nx, ny);
+      const layers = [1, 0.9, 0.8, 0.5, 0.2];
+      layers.forEach((layer) => {
+        const spread = (1 - layer) * 75;
+        const sparkle = document.createElement("span");
+        sparkle.className = "intro-sparkle";
+        sparkle.textContent = Math.random() > 0.78 ? "✶" : "✦";
+        const offsetX = Math.round(Math.random() * spread - spread / 2);
+        const offsetY = Math.round(Math.random() * spread - spread / 2);
+        sparkle.style.left = `${touch.clientX + offsetX}px`;
+        sparkle.style.top = `${touch.clientY + offsetY}px`;
+        sparkle.style.fontSize = `${8 + Math.random() * (12 * layer)}px`;
+        sparkle.style.color = Math.random() > 0.82 ? "rgba(255, 174, 72, 0.95)" : "rgba(255, 255, 255, 0.95)";
+        splash.appendChild(sparkle);
+        sparkleNodes.add(sparkle);
+        const ttl = Math.max(120, Math.round(Math.random() * layer * 600));
+        window.setTimeout(() => {
+          sparkle.remove();
+          sparkleNodes.delete(sparkle);
+        }, ttl);
+      });
     };
+    const onTouchStart = (event) => {
+      const touch = event.touches && event.touches[0];
+      spawnSparkles(touch);
+      lastSparkleTime = performance.now();
+    };
+    const onTouchMove = (event) => {
+      const touch = event.touches && event.touches[0];
+      const now = performance.now();
+      if (now - lastSparkleTime < 34) return;
+      lastSparkleTime = now;
+      spawnSparkles(touch);
+    };
+    const onTouchEnd = (event) => {
+      const touch = event.changedTouches && event.changedTouches[0];
+      spawnSparkles(touch);
+    };
+    splash.addEventListener("touchstart", onTouchStart, { passive: true });
     splash.addEventListener("touchmove", onTouchMove, { passive: true });
+    splash.addEventListener("touchend", onTouchEnd, { passive: true });
+    splash.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    cleanupFns.push(() => splash.removeEventListener("touchstart", onTouchStart));
     cleanupFns.push(() => splash.removeEventListener("touchmove", onTouchMove));
+    cleanupFns.push(() => splash.removeEventListener("touchend", onTouchEnd));
+    cleanupFns.push(() => splash.removeEventListener("touchcancel", onTouchEnd));
 
     const onResize = () => resizeCanvas();
     window.addEventListener("resize", onResize);
@@ -217,6 +256,8 @@
     const cleanup = () => {
       if (rafId) window.cancelAnimationFrame(rafId);
       cleanupFns.forEach((fn) => fn());
+      sparkleNodes.forEach((node) => node.remove());
+      sparkleNodes.clear();
       splash.classList.add("is-hidden");
       splash.setAttribute("aria-hidden", "true");
       document.body.classList.remove("intro-lock");
@@ -516,12 +557,14 @@
     let pointerStartX = 0;
     let pointerActive = false;
     const onPointerDown = (event) => {
+      if (event.pointerType && event.pointerType !== "mouse") return;
       pointerActive = true;
       pointerStartX = event.clientX;
       if (autoId) clearInterval(autoId);
       track.setPointerCapture?.(event.pointerId);
     };
     const onPointerUp = (event) => {
+      if (event.pointerType && event.pointerType !== "mouse") return;
       if (!pointerActive) return;
       pointerActive = false;
       const dx = event.clientX - pointerStartX;
