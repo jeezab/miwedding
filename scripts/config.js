@@ -17,6 +17,7 @@ window.WEDDING_CONFIG = {
   },
   eventDateISO: "2026-04-26",
   eventTime: "16:00",
+  eventTitle: "Свадьба Игоря и Маргариты",
   heroSubtitle: "Приглашаем вас на наш свадебный день",
   heroDescription: "Мы любим друг друга и решили стать мужем и женой. Будем счастливы видеть вас рядом.",
   storyTitle: "Мы станем семьёй!",
@@ -49,6 +50,9 @@ window.WEDDING_CONFIG = {
     { name: "Игорь", role: "Жених", phone: "89299151462", messenger: "@jeezab" },
     { name: "Маргарита", role: "Невеста", phone: "89858950932", messenger: "@mrrgoshh" }
   ],
-  rsvpEndpoint: "",
+  rsvpEndpoint: "https://script.google.com/macros/s/AKfycbyikYy_SK04MPJL1ep6qPRSc83NMrJhjeZ4luGzk5NBM5J42uw2XZ00o9k4MSo0blH02g/exec",
+  rsvpApiKey: "MRRRLOVEU",
+  rsvpApiKeyHeader: false,
+  rsvpSource: "wedding-site",
   deadlineRSVP: "2026-04-10"
 };

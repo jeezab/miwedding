@@ -17,6 +17,8 @@
   <section class="intro-splash" id="intro-splash" role="dialog" aria-modal="true" aria-label="Заставка приглашения" tabindex="0">
     <div class="intro-stage" id="intro-stage">
       <div class="intro-map-shell" id="intro-map-shell" aria-hidden="true">
+        <div class="intro-stars-layer intro-stars-layer-far"></div>
+        <div class="intro-stars-layer intro-stars-layer-near"></div>
         <canvas class="intro-stars-canvas" id="intro-stars-canvas"></canvas>
       </div>
       <div class="intro-copy">
@@ -32,17 +34,13 @@
 
   <main>
     <section class="screen-block hero reveal" id="hero">
+      <video class="hero-video-bg" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+        <source src="фоточки/пицца на берегу.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-video-overlay" aria-hidden="true"></div>
       <div class="container">
         <div class="hero-shell panel">
           <p class="hero-kicker">Wedding Day</p>
-          <div class="hero-photo-stack" aria-hidden="true">
-            <figure class="polaroid polaroid-left">
-              <img src="фоточки/волыну опусти.jpg" alt="" />
-            </figure>
-            <figure class="polaroid polaroid-right">
-              <img src="фоточки/леф.jpg" alt="" />
-            </figure>
-          </div>
           <h1 class="hero-title" id="hero-names">Игорь и Маргарита</h1>
         </div>
       </div>
@@ -114,9 +112,6 @@
     </section>
 
     <section class="video-bridge" id="video-bridge">
-      <video class="video-bridge-bg" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-        <source src="фоточки/ручки в небе.mp4" type="video/mp4" />
-      </video>
       <div class="video-bridge-overlay" aria-hidden="true"></div>
       <div class="video-bridge-inner">
         <section class="screen-block timeline reveal video-bridge-block" id="timeline">
@@ -147,36 +142,7 @@
           </div>
         </section>
 
-    <section class="screen-block wishes reveal video-bridge-block" id="wishes">
-      <div class="container">
-        <div class="wishes-shell panel">
-          <div class="wishes-copy">
-            <h2 id="wishes-title">Пожелания</h2>
-            <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
-            <div class="wishes-nav" aria-label="Переключение слайдов пожеланий">
-              <button class="wishes-arrow" id="wishes-prev" type="button" aria-label="Предыдущий слайд">&lt;</button>
-              <button class="wishes-arrow" id="wishes-next" type="button" aria-label="Следующий слайд">&gt;</button>
-            </div>
-          </div>
-          <div class="wishes-side">
-            <div class="contacts-copy wishes-pane is-active" id="wishes-pane-contacts">
-              <h2>Контакты</h2>
-              <div class="contacts-grid" id="contacts-grid"></div>
-            </div>
-            <div class="dresscode-copy wishes-pane" id="wishes-pane-dresscode">
-              <h2></h2>
-              <div class="dresscode-carousel" id="dresscode-carousel">
-                <div class="dresscode-track" id="dresscode-track"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-      </div>
-    </section>
-
-    <section class="screen-block rsvp reveal" id="rsvp">
+        <section class="screen-block rsvp reveal video-bridge-block" id="rsvp">
       <div class="container">
         <div class="rsvp-shell panel">
           <div class="rsvp-head">
@@ -214,6 +180,34 @@
             <p class="form-status" id="form-status" aria-live="polite"></p>
           </form>
         </div>
+      </div>
+    </section>
+        <section class="screen-block wishes reveal video-bridge-block" id="wishes">
+          <div class="container">
+            <div class="wishes-shell panel">
+              <div class="wishes-copy">
+                <h2 id="wishes-title">Пожелания</h2>
+                <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
+                <div class="wishes-nav" aria-label="Переключение слайдов пожеланий">
+                  <button class="wishes-arrow" id="wishes-prev" type="button" aria-label="Предыдущий слайд">&lt;</button>
+                  <button class="wishes-arrow" id="wishes-next" type="button" aria-label="Следующий слайд">&gt;</button>
+                </div>
+              </div>
+              <div class="wishes-side">
+                <div class="contacts-copy wishes-pane is-active" id="wishes-pane-contacts">
+                  <h2>Контакты</h2>
+                  <div class="contacts-grid" id="contacts-grid"></div>
+                </div>
+                <div class="dresscode-copy wishes-pane" id="wishes-pane-dresscode">
+                  <h2></h2>
+                  <div class="dresscode-carousel" id="dresscode-carousel">
+                    <div class="dresscode-track" id="dresscode-track"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   </main>

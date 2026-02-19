@@ -84,6 +84,31 @@ body.intro-lock {
 .intro-map-shell {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+}
+
+.intro-stars-layer {
+  position: absolute;
+  inset: -9%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.intro-stars-layer-far {
+  background-image: url("../фоточки/фоны/spr_stars02.png");
+  opacity: 0.34;
+  transform: translate3d(calc(var(--parallax-x) * -12), calc(var(--parallax-y) * -12), 0) scale(1.08);
+  z-index: 0;
+}
+
+.intro-stars-layer-near {
+  background-image: url("../фоточки/фоны/spr_stars01.png");
+  opacity: 0.48;
+  transform: translate3d(calc(var(--parallax-x) * -22), calc(var(--parallax-y) * -22), 0) scale(1.12);
+  z-index: 1;
 }
 
 .intro-stars-canvas {
@@ -91,7 +116,7 @@ body.intro-lock {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
 }
 
 .intro-sparkle {
@@ -223,6 +248,22 @@ textarea {
   overflow: hidden;
 }
 
+.hero-video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 10, 14, 0.2) 0%, rgba(10, 10, 14, 0.38) 100%);
+  z-index: 0;
+}
+
 .hero::before {
   content: "";
   position: absolute;
@@ -269,14 +310,20 @@ p {
   background: transparent;
   box-shadow: none;
   border: 0;
+  min-height: clamp(420px, 72svh, 760px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-kicker {
   text-transform: uppercase;
   letter-spacing: 0.28em;
   font-size: 12px;
-  color: var(--text-soft);
-  margin-bottom: 18px;
+  color: rgba(255, 253, 250, 0.86);
+  margin-bottom: 0;
+  transform: translateY(-16px);
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.26);
 }
 
 .hero-photo-stack {
@@ -325,7 +372,14 @@ p {
   z-index: 4;
   font-size: clamp(52px, 15vw, 108px);
   line-height: 0.95;
-  margin-bottom: 12px;
+  margin-top: auto;
+  margin-bottom: 0;
+  color: #fffdfa;
+  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.32);
+}
+
+.hero-amp {
+  color: rgba(255, 253, 250, 0.58);
 }
 
 .hero-subtitle {
@@ -589,6 +643,33 @@ p {
 
 .video-bridge .panel {
   background: rgba(255, 255, 255, 0.8);
+}
+
+.countdown {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.countdown::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../фоточки/лети ко мне.jpg") center top / cover no-repeat;
+  z-index: 0;
+}
+
+.countdown::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 12, 22, 0.24) 0%, rgba(8, 12, 22, 0.5) 100%);
+  z-index: 1;
+}
+
+.countdown .container {
+  position: relative;
+  z-index: 2;
 }
 
 .countdown-shell {
@@ -1055,6 +1136,21 @@ fieldset {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  #timeline.screen-block {
+    min-height: 74svh;
+  }
+
+  #countdown.narrow-block {
+    min-height: 94svh;
+    padding: 40px 0 54px;
+    display: flex;
+    align-items: center;
+  }
+
+  #countdown.countdown::before {
+    background-position: center 12%;
+  }
+
   .wishes-shell {
     grid-template-columns: 1.1fr 0.9fr;
     --wishes-height-mobile: 410px;
@@ -1076,5 +1172,9 @@ fieldset {
   .intro-copy {
     transition-duration: 180ms !important;
     animation: none !important;
+  }
+
+  .intro-stars-layer {
+    transform: none !important;
   }
 }

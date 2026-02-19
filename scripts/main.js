@@ -55,7 +55,6 @@
     const intro = config.intro || {};
     const enabled = intro.enabled !== false;
     const showEveryVisit = intro.showEveryVisit !== false;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const seen = readStorage(INTRO_SEEN_KEY) === "1";
     const shouldShow = enabled && (showEveryVisit || !seen);
     if (!shouldShow) {
@@ -63,6 +62,8 @@
       splash.setAttribute("aria-hidden", "true");
       return;
     }
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     setText("intro-title-line1", intro.titleLine1 || "ВАС ХОТЯТ КОЕ-КУДА");
     setText("intro-title-line2", intro.titleLine2 || "ПРИГЛАСИТЬ");
@@ -77,10 +78,10 @@
       return;
     }
 
-    const starCount = clamp(Number(intro.starCount) || 900, 150, 2200);
-    const accentRatio = clamp(Number(intro.accentStarRatio) || 0.02, 0, 0.1);
     const warpDuration = clamp(Number(intro.warpDurationMs) || 1200, 300, 4000);
     const fadeDuration = clamp(Number(intro.fadeDurationMs) || 500, 200, 2000);
+    const starCount = clamp(Number(intro.starCount) || 900, 150, 2200);
+    const accentRatio = clamp(Number(intro.accentStarRatio) || 0.02, 0, 0.1);
     const stars = [];
     for (let i = 0; i < starCount; i += 1) {
       const x = Math.random() * 2 - 1;
@@ -130,6 +131,8 @@
     const setParallax = (x, y) => {
       state.parallaxX = clamp(x, -1, 1);
       state.parallaxY = clamp(y, -1, 1);
+      splash.style.setProperty("--parallax-x", `${state.parallaxX.toFixed(3)}px`);
+      splash.style.setProperty("--parallax-y", `${state.parallaxY.toFixed(3)}px`);
     };
 
     const draw = (now) => {
@@ -298,8 +301,24 @@
 
   const initHero = () => {
     const names = config.coupleNames || {};
-    const displayNames = [names.groom, names.bride].filter(Boolean).join(" и ");
-    setText("hero-names", displayNames);
+    const groom = String(names.groom || "").trim();
+    const bride = String(names.bride || "").trim();
+    const displayNames = [groom, bride].filter(Boolean).join(" и ");
+    const heroNamesEl = byId("hero-names");
+    if (heroNamesEl) {
+      if (groom && bride) {
+        heroNamesEl.textContent = "";
+        heroNamesEl.append(document.createTextNode(`${groom} `));
+        const amp = document.createElement("span");
+        amp.className = "hero-amp";
+        amp.textContent = "&";
+        heroNamesEl.appendChild(amp);
+        heroNamesEl.appendChild(document.createElement("br"));
+        heroNamesEl.append(document.createTextNode(bride));
+      } else {
+        heroNamesEl.textContent = displayNames;
+      }
+    }
     setText("footer-names", displayNames);
     setText("hero-subtitle", config.heroSubtitle);
     setText("hero-description", config.heroDescription);
@@ -703,10 +722,15 @@
         plusOne,
         drinkPreference,
         wish,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
+        source: String(config.rsvpSource || "wedding-site"),
+        userAgent: window.navigator.userAgent || "",
+        tzOffsetMin: new Date().getTimezoneOffset(),
+        eventTitle: String(config.eventTitle || "")
       };
 
       const endpoint = (config.rsvpEndpoint || "").trim();
+      const apiKey = (config.rsvpApiKey || "").trim();
       const button = byId("rsvp-submit");
       if (button) button.disabled = true;
       status.textContent = "Отправляем...";
@@ -718,17 +742,36 @@
           form.reset();
           return;
         }
+        const headers = {
+          "Content-Type": "text/plain;charset=utf-8",
+          Accept: "application/json"
+        };
+        if (apiKey && config.rsvpApiKeyHeader === true) {
+          headers["x-api-key"] = apiKey;
+        } else if (apiKey) {
+          payload.apiKey = apiKey;
+        }
+
         const response = await fetch(endpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify(payload)
         });
-        const result = await response.json().catch(() => ({}));
+        const raw = await response.text();
+        let result = {};
+        if (raw) {
+          try {
+            result = JSON.parse(raw);
+          } catch (err) {
+            result = {};
+          }
+        }
         if (response.ok && result.ok) {
           status.textContent = "Спасибо! Ответ записан.";
           form.reset();
         } else {
-          status.textContent = result.error || "Ошибка отправки. Попробуйте позже.";
+          const details = result.details ? ` (${result.details})` : "";
+          status.textContent = (result.error ? `${result.error}${details}` : `Ошибка отправки (${response.status || 0}). Попробуйте позже.`);
         }
       } catch (err) {
         status.textContent = "Сеть недоступна. Попробуйте позже.";
