@@ -17,6 +17,14 @@
   --intro-accent: #ff9c23;
 }
 
+@font-face {
+  font-family: "Saint Amour Script";
+  src: url("../assets/fonts/saint-amour-script.otf") format("opentype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -370,16 +378,29 @@ p {
 .hero-title {
   position: relative;
   z-index: 4;
-  font-size: clamp(52px, 15vw, 108px);
-  line-height: 0.95;
+  font-family: "Saint Amour Script", "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-size: clamp(80px, 19vw, 188px);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
   margin-top: auto;
   margin-bottom: 0;
   color: #fffdfa;
-  text-shadow: 0 6px 22px rgba(0, 0, 0, 0.32);
+  text-shadow: 0 7px 24px rgba(0, 0, 0, 0.34);
+  white-space: pre-line;
 }
 
 .hero-amp {
-  color: rgba(255, 253, 250, 0.58);
+  display: inline-block;
+  margin-inline: 0.12em 0.16em;
+  font-size: 0.52em;
+  color: rgba(255, 253, 250, 0.75);
+}
+
+@media (max-width: 759px) {
+  .hero-title {
+    font-size: clamp(100px, 23.75vw, 235px);
+  }
 }
 
 .hero-subtitle {
@@ -490,6 +511,30 @@ p {
 
 .date-title {
   margin-bottom: 18px;
+}
+
+.date-script-heading {
+  width: min(640px, 100%);
+  margin: 0 auto 18px;
+  display: grid;
+  grid-template-columns: minmax(36px, 1fr) auto minmax(36px, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.date-script-line {
+  height: 1.5px;
+  background: rgba(63, 53, 57, 0.66);
+}
+
+.date-script-text {
+  margin: 0;
+  font-family: "Saint Amour Script", "Cormorant Garamond", serif;
+  font-size: clamp(84px, 14vw, 168px);
+  font-weight: 400;
+  line-height: 0.74;
+  letter-spacing: 0.01em;
+  color: #352c30;
 }
 
 .calendar-wrap {
