@@ -2,8 +2,8 @@ window.WEDDING_CONFIG = {
   intro: {
     enabled: true,
     showEveryVisit: true,
-    titleLine1: "ВАС ХОТЯТ КОЕ-КУДА",
-    titleLine2: "ПРИГЛАСИТЬ",
+    titleLine1: "ВЫ ПОПАЛИ В КРУГ",
+    titleLine2: "ИЗБРАННЫХ",
     coordsText: "55°54'5\"N 37°49'35\"E",
     dateLine: "26 АПРЕЛЯ 2026 ГОДА",
     accentStarRatio: 0.02,

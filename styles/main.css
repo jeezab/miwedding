@@ -14,7 +14,7 @@
   --max-width: 1160px;
   --intro-bg: #020205;
   --intro-text: rgba(255, 255, 255, 0.96);
-  --intro-accent: #ff9c23;
+  --intro-accent: #88ceff;
 }
 
 @font-face {
@@ -134,7 +134,7 @@ body.intro-lock {
   z-index: 3;
   line-height: 1;
   animation: intro-sparkle-fade 700ms ease-out forwards;
-  filter: drop-shadow(0 0 6px rgba(255, 230, 130, 0.45));
+  filter: drop-shadow(0 0 7px rgba(136, 206, 255, 0.52));
 }
 
 @keyframes intro-sparkle-fade {
@@ -963,6 +963,7 @@ p {
 .rsvp-form {
   display: grid;
   gap: 12px;
+  align-items: start;
 }
 
 .field {
@@ -980,6 +981,12 @@ fieldset {
   border: 0;
   margin: 0;
   padding: 0;
+}
+
+fieldset.field {
+  align-content: start;
+  grid-auto-rows: max-content;
+  justify-items: start;
 }
 
 .field input,
@@ -1000,6 +1007,34 @@ fieldset {
   align-items: center;
   gap: 8px;
   color: var(--text-main);
+  font-weight: 400;
+  width: max-content;
+  max-width: 100%;
+}
+
+.choice.is-disabled {
+  opacity: 0.46;
+}
+
+.choice.is-disabled input {
+  cursor: not-allowed;
+}
+
+.rsvp-form button[type="submit"] {
+  justify-self: center;
+  width: auto;
+  background: #cfb0ba;
+  box-shadow: 0 8px 22px rgba(149, 108, 122, 0.22);
+}
+
+.rsvp-form button[type="submit"].is-ready {
+  background: #ca728e;
+  box-shadow: 0 12px 28px rgba(202, 114, 142, 0.42);
+}
+
+.rsvp-form button[type="submit"]:disabled {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .honeypot {
@@ -1142,9 +1177,14 @@ fieldset {
   .rsvp-form .field:nth-child(5),
   .rsvp-form .field:nth-child(6),
   .rsvp-form .field:nth-child(7),
-  .rsvp-form button,
   .rsvp-form .form-status {
     grid-column: 1 / -1;
+  }
+
+  .rsvp-form button[type="submit"] {
+    justify-self: center;
+    width: auto;
+    min-width: 240px;
   }
 }
 

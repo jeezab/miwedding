@@ -146,6 +146,22 @@
       const trailLen = reducedMotion ? 1.6 : 10 + progress * 70;
       const twinkleTime = now * 0.001;
       const parallaxStrength = 34;
+      const drawStarShape = (x, y, radius, color) => {
+        const outer = Math.max(0.5, radius);
+        const inner = outer * 0.42;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        for (let i = 0; i < 8; i += 1) {
+          const angle = i * (Math.PI / 4) - Math.PI / 2;
+          const r = i % 2 === 0 ? outer : inner;
+          const px = x + Math.cos(angle) * r;
+          const py = y + Math.sin(angle) * r;
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+      };
 
       stars.forEach((star) => {
         const starParallaxX = state.parallaxX * parallaxStrength * star.depth;
@@ -153,7 +169,7 @@
         const sx = state.cx + star.x * state.radius * boost + starParallaxX;
         const sy = state.cy + star.y * state.radius * boost + starParallaxY;
         const alpha = star.twinkle * (0.74 + Math.sin(twinkleTime + star.phase) * 0.2);
-        const color = star.accent ? `rgba(255, 156, 35, ${alpha.toFixed(3)})` : `rgba(255, 255, 255, ${alpha.toFixed(3)})`;
+        const color = star.accent ? `rgba(136, 206, 255, ${alpha.toFixed(3)})` : `rgba(236, 246, 255, ${alpha.toFixed(3)})`;
 
         if (isWarping && !reducedMotion) {
           const px = state.cx + star.x * state.radius * Math.max(1, boost - trailLen / 100) + starParallaxX;
@@ -167,10 +183,7 @@
         }
 
         const radius = Math.max(0.45, star.size * (0.8 + progress * 2));
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-        ctx.fill();
+        drawStarShape(sx, sy, radius, color);
       });
 
       rafId = window.requestAnimationFrame(draw);
@@ -217,7 +230,7 @@
         sparkle.style.left = `${touch.clientX + offsetX}px`;
         sparkle.style.top = `${touch.clientY + offsetY}px`;
         sparkle.style.fontSize = `${8 + Math.random() * (12 * layer)}px`;
-        sparkle.style.color = Math.random() > 0.82 ? "rgba(255, 174, 72, 0.95)" : "rgba(255, 255, 255, 0.95)";
+        sparkle.style.color = Math.random() > 0.82 ? "rgba(136, 206, 255, 0.96)" : "rgba(242, 249, 255, 0.95)";
         splash.appendChild(sparkle);
         sparkleNodes.add(sparkle);
         const ttl = Math.max(120, Math.round(Math.random() * layer * 600));
@@ -492,8 +505,13 @@
     let step = 0;
     let autoId = 0;
     let isAnimating = false;
-    let pendingDir = 0;
-    const transitionValue = "transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1)";
+    let currentTransitionMs = 520;
+    const pendingMoves = [];
+    const transitionEasing = "cubic-bezier(0.2, 0.8, 0.2, 1)";
+    const applyTransition = (durationMs) => {
+      currentTransitionMs = clamp(Math.round(durationMs), 110, 520);
+      track.style.transition = `transform ${currentTransitionMs}ms ${transitionEasing}`;
+    };
 
     const setTrackPosition = () => {
       track.style.transform = `translate3d(${-index * step}px, 0, 0)`;
@@ -504,7 +522,7 @@
       track.style.transition = "none";
       setTrackPosition();
       track.offsetHeight;
-      track.style.transition = transitionValue;
+      applyTransition(currentTransitionMs);
     };
 
     const normalizeIndexIfNeeded = () => {
@@ -515,15 +533,30 @@
       }
     };
 
-    const navigate = (dir) => {
-      if (!step) return;
-      if (isAnimating) {
-        pendingDir = clamp(pendingDir + (dir > 0 ? 1 : -1), -4, 4);
-        return;
-      }
+    const moveOne = (dir, intensity = 1) => {
       isAnimating = true;
+      const queuePressure = pendingMoves.length;
+      const speedFactor = Math.max(1, intensity + queuePressure * 0.35);
+      applyTransition(520 / speedFactor);
       index += dir > 0 ? 1 : -1;
       setTrackPosition();
+    };
+
+    const queueMove = (dir, intensity = 1) => {
+      if (!step) return;
+      pendingMoves.push({
+        dir: dir > 0 ? 1 : -1,
+        intensity: Math.max(1, Number(intensity) || 1)
+      });
+      if (isAnimating) {
+        if (pendingMoves.length > 2 && currentTransitionMs > 160) {
+          applyTransition(currentTransitionMs * 0.82);
+        }
+        return;
+      }
+      const next = pendingMoves.shift();
+      if (!next) return;
+      moveOne(next.dir, next.intensity);
     };
 
     const measure = () => {
@@ -535,21 +568,22 @@
       index = clamp(index, 0, slides.length + 1);
       hardJumpTo(index);
       isAnimating = false;
+      pendingMoves.length = 0;
     };
 
-    const onTransitionEnd = () => {
+    const onTransitionEnd = (event) => {
+      if (event && event.propertyName && event.propertyName !== "transform") return;
       normalizeIndexIfNeeded();
       isAnimating = false;
-      if (pendingDir !== 0) {
-        const dir = pendingDir > 0 ? 1 : -1;
-        pendingDir += dir > 0 ? -1 : 1;
-        navigate(dir);
+      if (pendingMoves.length) {
+        const next = pendingMoves.shift();
+        moveOne(next.dir, next.intensity);
       }
     };
 
     const startAuto = () => {
       if (autoId) clearInterval(autoId);
-      autoId = window.setInterval(() => navigate(1), 2600);
+      autoId = window.setInterval(() => queueMove(1, 1), 2600);
     };
 
     let touchStartX = 0;
@@ -567,8 +601,9 @@
       }
       const dx = touch.clientX - touchStartX;
       if (Math.abs(dx) > 14) {
-        if (dx < 0) navigate(1);
-        else navigate(-1);
+        const intensity = Math.min(3.4, Math.abs(dx) / 52);
+        if (dx < 0) queueMove(1, intensity);
+        else queueMove(-1, intensity);
       }
       startAuto();
     };
@@ -588,22 +623,35 @@
       pointerActive = false;
       const dx = event.clientX - pointerStartX;
       if (Math.abs(dx) > 14) {
-        if (dx < 0) navigate(1);
-        else navigate(-1);
+        const intensity = Math.min(3.4, Math.abs(dx) / 52);
+        if (dx < 0) queueMove(1, intensity);
+        else queueMove(-1, intensity);
       }
       startAuto();
     };
 
-    let wheelLock = false;
+    let wheelAccumulator = 0;
+    let wheelResetTimer = 0;
+    const wheelThreshold = 38;
     const onWheel = (event) => {
       const primary = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-      if (Math.abs(primary) < 1.5 || wheelLock) return;
-      wheelLock = true;
-      if (primary > 0) navigate(1);
-      else navigate(-1);
-      window.setTimeout(() => {
-        wheelLock = false;
-      }, 180);
+      if (Math.abs(primary) < 0.8) return;
+      wheelAccumulator += primary;
+      if (wheelResetTimer) clearTimeout(wheelResetTimer);
+      wheelResetTimer = window.setTimeout(() => {
+        wheelAccumulator = 0;
+      }, 120);
+
+      const intensity = Math.min(3.6, 1 + Math.abs(primary) / wheelThreshold);
+      while (Math.abs(wheelAccumulator) >= wheelThreshold) {
+        if (wheelAccumulator > 0) {
+          queueMove(1, intensity);
+          wheelAccumulator -= wheelThreshold;
+        } else {
+          queueMove(-1, intensity);
+          wheelAccumulator += wheelThreshold;
+        }
+      }
     };
 
     track.addEventListener("transitionend", onTransitionEnd);
@@ -693,14 +741,83 @@
     const form = byId("rsvp-form");
     const status = byId("form-status");
     const deadline = byId("rsvp-deadline");
+    const button = byId("rsvp-submit");
+    const guestNameInput = byId("guestName");
+    const wishInput = byId("wish");
+    const attendanceInputs = Array.from(form ? form.querySelectorAll("input[name='attendance']") : []);
+    const drinkInputs = Array.from(form ? form.querySelectorAll("input[name='drinks']") : []);
+    const noneDrinkInput = drinkInputs.find((input) => input.value === "Не пью") || null;
+    const otherDrinkInputs = drinkInputs.filter((input) => input !== noneDrinkInput);
+    let isSubmitting = false;
+
     if (deadline && config.deadlineRSVP) {
       deadline.textContent = formatDate(config.deadlineRSVP);
     }
     if (!form || !status) return;
 
+    const setChoiceDisabled = (input, disabled) => {
+      input.disabled = disabled;
+      const choice = input.closest(".choice");
+      if (choice) choice.classList.toggle("is-disabled", disabled);
+    };
+
+    const syncDrinksState = () => {
+      if (!noneDrinkInput) return;
+      const hasOtherSelected = otherDrinkInputs.some((input) => input.checked);
+      if (noneDrinkInput.checked) {
+        otherDrinkInputs.forEach((input) => {
+          input.checked = false;
+          setChoiceDisabled(input, true);
+        });
+        setChoiceDisabled(noneDrinkInput, false);
+        return;
+      }
+      if (hasOtherSelected) {
+        noneDrinkInput.checked = false;
+        setChoiceDisabled(noneDrinkInput, true);
+        otherDrinkInputs.forEach((input) => setChoiceDisabled(input, false));
+        return;
+      }
+      setChoiceDisabled(noneDrinkInput, false);
+      otherDrinkInputs.forEach((input) => setChoiceDisabled(input, false));
+    };
+
+    const isFormComplete = () => {
+      const hasName = !!(guestNameInput && guestNameInput.value.trim());
+      const hasAttendance = attendanceInputs.some((input) => input.checked);
+      const hasDrinkChoice = drinkInputs.some((input) => input.checked);
+      const hasWish = !!(wishInput && wishInput.value.trim());
+      return hasName && hasAttendance && hasDrinkChoice && hasWish;
+    };
+
+    const syncSubmitState = () => {
+      if (!button) return;
+      const ready = isFormComplete() && !isSubmitting;
+      button.disabled = !ready;
+      button.classList.toggle("is-ready", ready);
+    };
+
+    const onFormChanged = () => {
+      syncDrinksState();
+      syncSubmitState();
+    };
+
+    form.addEventListener("input", onFormChanged);
+    form.addEventListener("change", onFormChanged);
+
+    syncDrinksState();
+    syncSubmitState();
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       status.textContent = "";
+
+      syncDrinksState();
+      if (!isFormComplete()) {
+        status.textContent = "Пожалуйста, заполните все поля анкеты.";
+        syncSubmitState();
+        return;
+      }
 
       const data = new FormData(form);
       const guestName = String(data.get("guestName") || "").trim();
@@ -711,10 +828,6 @@
       const honeypot = String(data.get("company") || "").trim();
 
       if (honeypot) return;
-      if (!guestName || !attendance) {
-        status.textContent = "Пожалуйста, заполните имя и выберите ответ.";
-        return;
-      }
 
       const payload = {
         guestName,
@@ -731,8 +844,11 @@
 
       const endpoint = (config.rsvpEndpoint || "").trim();
       const apiKey = (config.rsvpApiKey || "").trim();
-      const button = byId("rsvp-submit");
-      if (button) button.disabled = true;
+      isSubmitting = true;
+      if (button) {
+        button.disabled = true;
+        button.classList.remove("is-ready");
+      }
       status.textContent = "Отправляем...";
 
       try {
@@ -776,7 +892,9 @@
       } catch (err) {
         status.textContent = "Сеть недоступна. Попробуйте позже.";
       } finally {
-        if (button) button.disabled = false;
+        isSubmitting = false;
+        syncDrinksState();
+        syncSubmitState();
       }
     });
   };
