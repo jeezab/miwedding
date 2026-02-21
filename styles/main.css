@@ -263,6 +263,12 @@ textarea {
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.hero-video-bg.is-ready {
+  opacity: 1;
 }
 
 .hero-video-overlay {
@@ -611,6 +617,22 @@ p {
   font-weight: 600;
 }
 
+#location-route {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-color: transparent;
+  color: #fff !important;
+  background: #ca728e;
+  box-shadow: 0 12px 28px rgba(202, 114, 142, 0.42);
+}
+
+#location-route:hover {
+  background: #d07f99;
+  box-shadow: 0 14px 30px rgba(208, 127, 153, 0.46);
+}
+
 .map-frame {
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -797,91 +819,52 @@ p {
 }
 
 .wishes-shell {
-  --wishes-height-mobile: 560px;
   padding: 22px;
   display: grid;
   gap: 18px;
-  grid-template-rows: 1fr 1fr;
-  height: var(--wishes-height-mobile);
-  max-height: var(--wishes-height-mobile);
-  overflow: hidden;
+  align-items: start;
+}
+
+.wishes-copy {
+  display: grid;
+  gap: 10px;
+  align-content: start;
 }
 
 .wishes-copy p {
   color: var(--text-soft);
 }
 
-.wishes-copy {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  transition: opacity 0.26s ease, transform 0.26s ease;
+.dresscode-text {
+  margin-top: 4px;
 }
 
-.wishes-copy.is-switching {
-  opacity: 0.32;
-  transform: translateY(6px);
-}
-
-.wishes-nav {
-  margin-top: auto;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding-top: 14px;
-}
-
-.wishes-arrow {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.46);
-  background: rgba(7, 14, 31, 0.35);
-  color: #fff;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.wishes-side {
-  position: relative;
-  height: 100%;
-}
-
-.wishes-pane {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateX(18px) scale(0.985);
-  pointer-events: none;
-  transition: opacity 0.42s ease, transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.wishes-pane.is-active {
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  pointer-events: auto;
-}
-
-.contacts-copy.wishes-pane.is-active,
-.dresscode-copy.wishes-pane.is-active {
+.dresscode-copy {
   display: grid;
-  grid-template-rows: auto 1fr;
-  height: 100%;
+  gap: 10px;
 }
 
-.contacts-copy h2,
-.dresscode-copy h2 {
-  margin-bottom: 10px;
+.dresscode-copy h3 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.contacts-shell {
+  padding: 22px;
+}
+
+.contacts-shell h2 {
+  margin-bottom: 12px;
 }
 
 .contacts-grid {
   display: grid;
   gap: 10px;
   align-content: start;
-  overflow: auto;
-  padding-right: 2px;
 }
 
 .contact-card {
@@ -1021,6 +1004,7 @@ fieldset.field {
 }
 
 .rsvp-form button[type="submit"] {
+  grid-column: 1 / -1;
   justify-self: center;
   width: auto;
   background: #cfb0ba;
@@ -1117,8 +1101,7 @@ fieldset.field {
   }
 
   .wishes-shell {
-    --wishes-height-mobile: 420px;
-    grid-template-rows: 1fr;
+    grid-template-rows: auto;
   }
 
   .story-left {
@@ -1167,6 +1150,10 @@ fieldset.field {
     padding: 28px;
   }
 
+  .contacts-shell {
+    padding: 28px;
+  }
+
   .rsvp-form {
     grid-template-columns: 1fr 1fr;
     column-gap: 16px;
@@ -1182,6 +1169,7 @@ fieldset.field {
   }
 
   .rsvp-form button[type="submit"] {
+    grid-column: 1 / -1;
     justify-self: center;
     width: auto;
     min-width: 240px;
@@ -1238,7 +1226,6 @@ fieldset.field {
 
   .wishes-shell {
     grid-template-columns: 1.1fr 0.9fr;
-    --wishes-height-mobile: 410px;
   }
 }
 

@@ -25,7 +25,7 @@ window.WEDDING_CONFIG = {
   dateText: "Не пропустите важное событие - день нашей свадьбы.",
   locationTitle: "Локация",
   locationSubtitle: "Празднуем нашу свадьбу в Вишневом саду.",
-  locationAddress: "Королёв, мкр. Юбилейный, ул. М. К. Тихонравова, 17А",
+  locationAddress: "Королёв, мкр. Юбилейный, ул. М. К. Тихонравова, 17А, 2 этаж",
   locationTime: "Сбор гостей в 15:30",
   locationRouteUrl: "",
   locationMapEmbedUrl: "https://yandex.ru/map-widget/v1/?text=%D0%9A%D0%BE%D1%80%D0%BE%D0%BB%D1%91%D0%B2%2C%20%D0%BC%D0%BA%D1%80.%20%D0%AE%D0%B1%D0%B8%D0%BB%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C%20%D1%83%D0%BB.%20%D0%9C.%20%D0%9A.%20%D0%A2%D0%B8%D1%85%D0%BE%D0%BD%D1%80%D0%B0%D0%B2%D0%BE%D0%B2%D0%B0%2C%2017%D0%90&z=17",

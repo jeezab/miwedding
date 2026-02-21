@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="color-scheme" content="only light" />
   <meta name="supported-color-schemes" content="light" />
   <meta name="theme-color" content="#fffff0" />
@@ -11,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/main.css?v=20260221-1" />
 </head>
 <body>
   <section class="intro-splash" id="intro-splash" role="dialog" aria-modal="true" aria-label="Заставка приглашения" tabindex="0">
@@ -34,8 +37,8 @@
 
   <main>
     <section class="screen-block hero reveal" id="hero">
-      <video class="hero-video-bg" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-        <source src="фоточки/пицца на берегу.mp4" type="video/mp4" />
+      <video class="hero-video-bg" autoplay muted loop playsinline preload="auto" poster="фоточки/фоны/фон1блок.jpg" aria-hidden="true">
+        <source src="фоточки/пицца побольше.mp4?v=20260221-1" type="video/mp4" />
       </video>
       <div class="hero-video-overlay" aria-hidden="true"></div>
       <div class="container">
@@ -103,7 +106,6 @@
             <h2 id="location-title">Место проведения</h2>
             <p id="location-subtitle">Собираемся на красивой площадке, все детали ниже.</p>
             <p class="location-address" id="location-address">Королёв, мкр. Юбилейный, ул. М. К. Тихонравова, 17А</p>
-            <p class="location-time" id="location-time">Сбор гостей в 15:30</p>
             <a class="button button-primary" id="location-route" href="#" target="_blank" rel="noopener">Как добраться</a>
           </div>
           <div class="map-frame">
@@ -121,6 +123,24 @@
             <div class="timeline-shell panel">
               <h2>Тайминг</h2>
               <div class="timeline-grid" id="timeline-grid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen-block wishes reveal video-bridge-block" id="wishes">
+          <div class="container">
+            <div class="wishes-shell panel">
+              <div class="wishes-copy">
+                <h2 id="wishes-title">Пожелания</h2>
+                <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
+                <p class="dresscode-text" id="dresscode-text">Будем рады, если в этот день вы поддержите атмосферу праздника и выберете наряды в нашей палитре.</p>
+              </div>
+              <div class="dresscode-copy">
+                <h3>Дресс-код</h3>
+                <div class="dresscode-carousel" id="dresscode-carousel">
+                  <div class="dresscode-track" id="dresscode-track"></div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -184,29 +204,11 @@
         </div>
       </div>
     </section>
-        <section class="screen-block wishes reveal video-bridge-block" id="wishes">
+        <section class="screen-block contacts reveal video-bridge-block" id="contacts">
           <div class="container">
-            <div class="wishes-shell panel">
-              <div class="wishes-copy">
-                <h2 id="wishes-title">Пожелания</h2>
-                <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
-                <div class="wishes-nav" aria-label="Переключение слайдов пожеланий">
-                  <button class="wishes-arrow" id="wishes-prev" type="button" aria-label="Предыдущий слайд">&lt;</button>
-                  <button class="wishes-arrow" id="wishes-next" type="button" aria-label="Следующий слайд">&gt;</button>
-                </div>
-              </div>
-              <div class="wishes-side">
-                <div class="contacts-copy wishes-pane is-active" id="wishes-pane-contacts">
-                  <h2>Контакты</h2>
-                  <div class="contacts-grid" id="contacts-grid"></div>
-                </div>
-                <div class="dresscode-copy wishes-pane" id="wishes-pane-dresscode">
-                  <h2></h2>
-                  <div class="dresscode-carousel" id="dresscode-carousel">
-                    <div class="dresscode-track" id="dresscode-track"></div>
-                  </div>
-                </div>
-              </div>
+            <div class="contacts-shell panel">
+              <h2>Контакты</h2>
+              <div class="contacts-grid" id="contacts-grid"></div>
             </div>
           </div>
         </section>
@@ -220,7 +222,7 @@
     </div>
   </footer>
 
-  <script src="scripts/config.js"></script>
-  <script src="scripts/main.js"></script>
+  <script src="scripts/config.js?v=20260221-1"></script>
+  <script src="scripts/main.js?v=20260221-1"></script>
 </body>
 </html>

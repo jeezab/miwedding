@@ -339,6 +339,40 @@
     setText("hero-time", config.eventTime);
   };
 
+  const initHeroVideo = () => {
+    const video = document.querySelector(".hero-video-bg");
+    if (!video) return;
+
+    const markReady = () => {
+      video.classList.add("is-ready");
+    };
+
+    const tryPlay = () => {
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    };
+
+    if (video.readyState >= 2) {
+      markReady();
+    } else {
+      video.addEventListener("loadeddata", markReady, { once: true });
+      video.addEventListener("canplay", markReady, { once: true });
+    }
+
+    tryPlay();
+
+    const resumeOnGesture = () => {
+      tryPlay();
+      window.removeEventListener("touchstart", resumeOnGesture);
+      window.removeEventListener("pointerdown", resumeOnGesture);
+    };
+
+    window.addEventListener("touchstart", resumeOnGesture, { once: true, passive: true });
+    window.addEventListener("pointerdown", resumeOnGesture, { once: true, passive: true });
+  };
+
   const initStory = () => {
     setText("story-title", config.storyTitle);
     setText("story-text", config.storyText);
@@ -355,7 +389,6 @@
     setText("location-title", config.locationTitle);
     setText("location-subtitle", config.locationSubtitle);
     setText("location-address", config.locationAddress);
-    setText("location-time", config.locationTime);
 
     const address = String(config.locationAddress || "").trim();
     const encodedAddress = encodeURIComponent(address);
@@ -398,61 +431,13 @@
   const initWishes = () => {
     const titleEl = byId("wishes-title");
     const textEl = byId("wishes-text");
-    const copyEl = titleEl ? titleEl.closest(".wishes-copy") : null;
-    const prevBtn = byId("wishes-prev");
-    const nextBtn = byId("wishes-next");
-    const contactsPane = byId("wishes-pane-contacts");
-    const dresscodePane = byId("wishes-pane-dresscode");
-    if (!titleEl || !textEl || !copyEl || !prevBtn || !nextBtn || !contactsPane || !dresscodePane) return;
-
-    const slides = [
-      {
-        title: "Пожелания",
-        text: config.wishesText || "Ваше присутствие - лучший подарок для нас.",
-        pane: contactsPane
-      },
-      {
-        title: "Дресс-код",
-        text: config.dressCodeText || "Будем рады, если в этот день вы поддержите атмосферу праздника и выберете наряды в нашей палитре.",
-        pane: dresscodePane
-      }
-    ];
-
-    let activeIndex = 0;
-    let switching = false;
-
-    const render = () => {
-      slides.forEach((slide, index) => {
-        slide.pane.classList.toggle("is-active", index === activeIndex);
-      });
-      titleEl.textContent = slides[activeIndex].title;
-      textEl.textContent = slides[activeIndex].text;
-    };
-
-    const switchTo = (nextIndex) => {
-      if (switching) return;
-      switching = true;
-      copyEl.classList.add("is-switching");
-      window.setTimeout(() => {
-        activeIndex = nextIndex;
-        render();
-        copyEl.classList.remove("is-switching");
-        window.setTimeout(() => {
-          switching = false;
-        }, 220);
-      }, 140);
-    };
-
-    prevBtn.addEventListener("click", () => {
-      const nextIndex = (activeIndex - 1 + slides.length) % slides.length;
-      switchTo(nextIndex);
-    });
-    nextBtn.addEventListener("click", () => {
-      const nextIndex = (activeIndex + 1) % slides.length;
-      switchTo(nextIndex);
-    });
-
-    render();
+    const dressCodeTextEl = byId("dresscode-text");
+    if (!titleEl || !textEl) return;
+    titleEl.textContent = "Пожелания";
+    textEl.textContent = config.wishesText || "Ваше присутствие - лучший подарок для нас.";
+    if (dressCodeTextEl) {
+      dressCodeTextEl.textContent = config.dressCodeText || "Будем рады, если в этот день вы поддержите атмосферу праздника и выберете наряды в нашей палитре.";
+    }
   };
 
   const initContacts = () => {
@@ -700,15 +685,35 @@
     const hoursEl = byId("count-hours");
     const minsEl = byId("count-mins");
     const secsEl = byId("count-secs");
+    const labelEls = Array.from(document.querySelectorAll("#countdown .count-label"));
     if (!daysEl || !hoursEl || !minsEl || !secsEl || !config.eventDateISO) return;
 
     let timerId = null;
+
+    const pluralizeRu = (value, one, few, many) => {
+      const abs = Math.abs(Number(value) || 0);
+      const mod100 = abs % 100;
+      const mod10 = abs % 10;
+      if (mod100 >= 11 && mod100 <= 14) return many;
+      if (mod10 === 1) return one;
+      if (mod10 >= 2 && mod10 <= 4) return few;
+      return many;
+    };
+
+    const setLabels = (days, hours, mins, secs) => {
+      if (labelEls.length < 4) return;
+      labelEls[0].textContent = pluralizeRu(days, "день", "дня", "дней");
+      labelEls[1].textContent = pluralizeRu(hours, "час", "часа", "часов");
+      labelEls[2].textContent = pluralizeRu(mins, "минута", "минуты", "минут");
+      labelEls[3].textContent = pluralizeRu(secs, "секунда", "секунды", "секунд");
+    };
 
     const setZero = () => {
       daysEl.textContent = "0";
       hoursEl.textContent = "0";
       minsEl.textContent = "0";
       secsEl.textContent = "0";
+      setLabels(0, 0, 0, 0);
     };
 
     const update = () => {
@@ -731,6 +736,7 @@
       hoursEl.textContent = String(remHours);
       minsEl.textContent = String(remMins);
       secsEl.textContent = String(remSecs);
+      setLabels(days, remHours, remMins, remSecs);
     };
 
     update();
@@ -918,6 +924,7 @@
 
   initIntro();
   initHero();
+  initHeroVideo();
   initStory();
   initDate();
   initLocation();
