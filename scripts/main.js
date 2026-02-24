@@ -24,6 +24,15 @@
     }).format(date);
   };
 
+  const formatShortSlashDate = (iso) => {
+    const date = new Date(`${iso}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return "";
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear()).slice(-2);
+    return `${day} / ${month} / ${year}`;
+  };
+
   const setText = (id, value) => {
     const el = byId(id);
     if (el && value !== undefined && value !== null) el.textContent = String(value);
@@ -382,7 +391,9 @@
     setText("date-text", config.dateText);
     setText("date-full", formatDate(config.eventDateISO));
     setText("date-time", config.eventTime);
-    setText("calendar-month", formatMonthYear(config.eventDateISO));
+    const monthOnly = formatMonthYear(config.eventDateISO).split(" ")[0] || "";
+    setText("calendar-month", monthOnly.toUpperCase());
+    setText("calendar-short-date", formatShortSlashDate(config.eventDateISO));
   };
 
   const initLocation = () => {
@@ -420,9 +431,9 @@
       const card = document.createElement("div");
       card.className = "timeline-card";
       card.innerHTML = `
-        <div class="timeline-time">${item.time || ""}</div>
-        <div class="timeline-title">${item.title || ""}</div>
-        <div class="timeline-desc">${item.description || ""}</div>
+        <span class="timeline-time">${item.time || ""}</span>
+        <span class="timeline-sep" aria-hidden="true"></span>
+        <span class="timeline-title">${item.title || ""}</span>
       `;
       grid.appendChild(card);
     });
@@ -430,14 +441,73 @@
 
   const initWishes = () => {
     const titleEl = byId("wishes-title");
-    const textEl = byId("wishes-text");
-    const dressCodeTextEl = byId("dresscode-text");
-    if (!titleEl || !textEl) return;
+    const textEl = byId("wishes-slide-text");
+    const indicatorEl = byId("wishes-indicator");
+    const prevBtn = byId("wishes-prev");
+    const nextBtn = byId("wishes-next");
+    if (!titleEl || !textEl || !indicatorEl || !prevBtn || !nextBtn) return;
+
     titleEl.textContent = "Пожелания";
-    textEl.textContent = config.wishesText || "Ваше присутствие - лучший подарок для нас.";
-    if (dressCodeTextEl) {
-      dressCodeTextEl.textContent = config.dressCodeText || "Будем рады, если в этот день вы поддержите атмосферу праздника и выберете наряды в нашей палитре.";
-    }
+
+    const configuredSlides = Array.isArray(config.wishesSlides) ? config.wishesSlides : [];
+    const fallbackSlides = [config.wishesText, config.dressCodeText];
+    const slides = (configuredSlides.length ? configuredSlides : fallbackSlides)
+      .map((item) => String(item || "").trim())
+      .filter(Boolean);
+    if (!slides.length) slides.push("Ваше присутствие - лучший подарок для нас.");
+
+    let index = 0;
+    let isAnimating = false;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fadeOutMs = prefersReducedMotion ? 0 : 150;
+    const fadeInMs = prefersReducedMotion ? 0 : 220;
+
+    const render = () => {
+      textEl.textContent = slides[index];
+      indicatorEl.textContent = `${index + 1} / ${slides.length}`;
+    };
+
+    const swapTo = (nextIndex) => {
+      if (nextIndex === index || isAnimating) return;
+      if (prefersReducedMotion) {
+        index = nextIndex;
+        render();
+        return;
+      }
+      isAnimating = true;
+      textEl.classList.add("is-fade-out");
+      indicatorEl.classList.add("is-fade-out");
+
+      window.setTimeout(() => {
+        index = nextIndex;
+        render();
+        textEl.classList.remove("is-fade-out");
+        indicatorEl.classList.remove("is-fade-out");
+        textEl.classList.add("is-fade-in");
+        indicatorEl.classList.add("is-fade-in");
+
+        window.requestAnimationFrame(() => {
+          textEl.classList.remove("is-fade-in");
+          indicatorEl.classList.remove("is-fade-in");
+        });
+
+        window.setTimeout(() => {
+          isAnimating = false;
+        }, fadeInMs);
+      }, fadeOutMs);
+    };
+
+    prevBtn.addEventListener("click", () => {
+      const nextIndex = (index - 1 + slides.length) % slides.length;
+      swapTo(nextIndex);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const nextIndex = (index + 1) % slides.length;
+      swapTo(nextIndex);
+    });
+
+    render();
   };
 
   const initContacts = () => {
@@ -931,7 +1001,6 @@
   initTimeline();
   initWishes();
   initContacts();
-  initDressCode();
   initCalendar();
   initCountdown();
   initRSVP();

@@ -13,7 +13,7 @@
   <meta name="description" content="Свадебное приглашение" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400&family=Manrope:wght@400;500;600&family=Poiret+One&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles/main.css?v=20260221-1" />
 </head>
 <body>
@@ -57,17 +57,6 @@
               <h2 id="story-title">Наша история</h2>
               <p id="story-text">Мы любим друг друга и решили стать мужем и женой. Будем счастливы разделить этот день с вами.</p>
             </div>
-            <div class="story-bottom">
-              <div class="hero-meta">
-                <span id="hero-date">26 апреля 2026 г.</span>
-                <span class="hero-dot">✦</span>
-                <span id="hero-time">16:00</span>
-              </div>
-              <div class="hero-actions">
-                <a class="button button-primary" href="#rsvp">Подтвердить присутствие</a>
-                <a class="button button-outline" href="#location">Как добраться</a>
-              </div>
-            </div>
           </div>
           <div class="story-media">
             <img id="story-photo" src="фоточки/пипипи.png" alt="Фото пары" />
@@ -85,15 +74,18 @@
             <span class="date-script-line" aria-hidden="true"></span>
           </div>
           <div class="calendar-wrap" aria-label="Календарь свадьбы">
+            <div class="calendar-header" id="calendar-month">АПРЕЛЬ</div>
+            <div class="calendar-short-date" id="calendar-short-date">26 / 04 / 26</div>
             <div class="calendar-weekdays">
               <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
             </div>
             <div class="calendar-grid" id="calendar-grid"></div>
           </div>
+          <div class="calendar-bottom-line" aria-hidden="true"></div>
           <div class="date-line">
-            <span id="date-full">26 апреля 2026</span>
-            <span>/</span>
-            <span id="date-time">16:00</span>
+            <!-- <span id="date-full">26 апреля 2026</span> -->
+            <!-- <span>/</span> -->
+            <!-- <span id="date-time">16:00</span> -->
           </div>
         </div>
       </div>
@@ -121,7 +113,7 @@
         <section class="screen-block timeline reveal video-bridge-block" id="timeline">
           <div class="container">
             <div class="timeline-shell panel">
-              <h2>Тайминг</h2>
+              <h2>ТАЙМИНГ</h2>
               <div class="timeline-grid" id="timeline-grid"></div>
             </div>
           </div>
@@ -130,15 +122,15 @@
         <section class="screen-block wishes reveal video-bridge-block" id="wishes">
           <div class="container">
             <div class="wishes-shell panel">
-              <div class="wishes-copy">
+              <div class="wishes-slider" id="wishes-slider">
+                <span class="wishes-quote wishes-quote-left" aria-hidden="true">“</span>
+                <span class="wishes-quote wishes-quote-right" aria-hidden="true">”</span>
                 <h2 id="wishes-title">Пожелания</h2>
-                <p id="wishes-text">Ваше присутствие - лучший подарок для нас.</p>
-                <p class="dresscode-text" id="dresscode-text">Будем рады, если в этот день вы поддержите атмосферу праздника и выберете наряды в нашей палитре.</p>
-              </div>
-              <div class="dresscode-copy">
-                <h3>Дресс-код</h3>
-                <div class="dresscode-carousel" id="dresscode-carousel">
-                  <div class="dresscode-track" id="dresscode-track"></div>
+                <p class="wishes-slide-text" id="wishes-slide-text"></p>
+                <div class="wishes-controls">
+                  <button class="wishes-nav wishes-prev" id="wishes-prev" type="button" aria-label="Предыдущий слайд">←</button>
+                  <span class="wishes-indicator" id="wishes-indicator">1 / 2</span>
+                  <button class="wishes-nav wishes-next" id="wishes-next" type="button" aria-label="Следующий слайд">→</button>
                 </div>
               </div>
             </div>

@@ -27,22 +27,23 @@ window.WEDDING_CONFIG = {
   locationSubtitle: "Празднуем нашу свадьбу в Вишневом саду.",
   locationAddress: "Королёв, мкр. Юбилейный, ул. М. К. Тихонравова, 17А, 2 этаж",
   locationTime: "Сбор гостей в 15:30",
-  locationRouteUrl: "",
-  locationMapEmbedUrl: "https://yandex.ru/map-widget/v1/?text=%D0%9A%D0%BE%D1%80%D0%BE%D0%BB%D1%91%D0%B2%2C%20%D0%BC%D0%BA%D1%80.%20%D0%AE%D0%B1%D0%B8%D0%BB%D0%B5%D0%B9%D0%BD%D1%8B%D0%B9%2C%20%D1%83%D0%BB.%20%D0%9C.%20%D0%9A.%20%D0%A2%D0%B8%D1%85%D0%BE%D0%BD%D1%80%D0%B0%D0%B2%D0%BE%D0%B2%D0%B0%2C%2017%D0%90&z=17",
+  locationRouteUrl: "https://yandex.com/maps/org/vishnyovy_sad/1218655854/?ll=37.832692%2C55.937714&source=constructorLink&um=constructor%3A8f7344c5cc857b7ba7daca89d93e100a6b9bd560cc2b28f07e401f1670c21d68&z=16.79",
+  locationMapEmbedUrl: "https://yandex.ru/map-widget/v1/?um=constructor%3A8f7344c5cc857b7ba7daca89d93e100a6b9bd560cc2b28f07e401f1670c21d68&source=constructor",
   timelineItems: [
-    { time: "15:30", title: "Сбор гостей", description: "" },
-    { time: "16:00", title: "Прибытие молодожёнов", description: "" },
-    { time: "17:00", title: "Акт 1", description: "" },
-    { time: "18:00", title: "Акт 2", description: "" },
-    { time: "20:00", title: "Акт 3", description: "" },
-    { time: "21:00", title: "Торт", description: "" },
-    { time: "23:00", title: "По домам", description: "" }
+    { time: "15:30", title: "сбор гостей", description: "" },
+    { time: "16:00", title: "банкет", description: "" },
+    { time: "21:00", title: "свадебный торт", description: "" },
+    { time: "22:30", title: "завершение вечера", description: "" }
   ],
   dressCodeColors: [
     { label: "Айвори", value: "#fffff0" },
     { label: "Пепельно-розовый", value: "#d8b7bf" },
     { label: "Румяный туман", value: "#f4e3e7" },
     { label: "Молочный", value: "#fffdfa" }
+  ],
+  wishesSlides: [
+    "Мы очень ждём и готовимся к нашему незабываемому дню! Поддержите нас незабываемыми улыбками и объятиями, а также красивыми нарядами. Только не белый и не чёрный.",
+    "Входной билет - лотерейный билет, цветы дарить не нужно, будем рады деньгам."
   ],
   wishesText: "Ваше присутствие — лучший подарок. Если хотите порадовать нас дополнительно, мы мечтаем о совместном путешествии.",
   dressCodeText: "Будем рады, если в этот день вы поддержите атмосферу праздника и выберете образы в оттенках айвори, пепельно-розового и бежевого.",

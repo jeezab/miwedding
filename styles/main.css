@@ -25,6 +25,14 @@
   font-weight: 400;
 }
 
+@font-face {
+  font-family: "Novelist";
+  src: url("../assets/fonts/novelist.otf") format("opentype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -498,9 +506,36 @@ p {
   color: var(--text-soft);
 }
 
+#story-title {
+  white-space: nowrap;
+  text-wrap: nowrap;
+  font-size: clamp(28px, 6.6vw, 64px);
+}
+
 .story-media img {
+  width: 80%;
+  margin-inline: auto;
   aspect-ratio: 4 / 5;
   object-fit: contain;
+}
+
+@media (max-width: 759px) {
+  #story .story-left,
+  #story .story-copy {
+    display: contents;
+  }
+
+  #story #story-title {
+    order: 1;
+  }
+
+  #story .story-media {
+    order: 2;
+  }
+
+  #story #story-text {
+    order: 3;
+  }
 }
 
 .story-bottom {
@@ -551,7 +586,15 @@ p {
 .calendar-header {
   font-family: "Cormorant Garamond", serif;
   font-size: clamp(36px, 10vw, 54px);
-  margin-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.calendar-short-date {
+  margin-bottom: 14px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(20px, 4.4vw, 30px);
+  letter-spacing: 0.1em;
+  color: #3f3539;
 }
 
 .calendar-weekdays,
@@ -573,6 +616,7 @@ p {
   font-size: 24px;
   font-family: "Cormorant Garamond", serif;
   border-radius: 999px;
+  position: relative;
 }
 
 .calendar-grid span.in-month {
@@ -580,8 +624,27 @@ p {
 }
 
 .calendar-grid span.is-event {
-  border: 2px solid #3f3539;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85);
+  border: 0;
+  box-shadow: none;
+}
+
+.calendar-grid span.is-event::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: clamp(62px, 11vw, 74px);
+  height: clamp(62px, 11vw, 74px);
+  transform: translate(-50%, -50%);
+  background: url("../фоточки/heartaround.png") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.calendar-bottom-line {
+  width: min(640px, 100%);
+  height: 1.5px;
+  margin: 12px auto 0;
+  background: rgba(63, 53, 57, 0.66);
 }
 
 .date-text {
@@ -637,48 +700,142 @@ p {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--line);
+  line-height: 0;
 }
 
 .map-frame iframe {
+  display: block;
+  vertical-align: top;
   border: 0;
   width: 100%;
   min-height: 300px;
 }
 
 .timeline-shell {
-  padding: 22px;
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: clamp(42px, 7vw, 72px) 20px clamp(52px, 9vw, 86px);
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 .timeline-shell h2 {
-  margin-bottom: 16px;
+  margin-bottom: clamp(48px, 8.5vw, 82px);
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Poiret One", "Jost", "Manrope", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.11em;
+  font-size: calc(clamp(54px, 11vw, 116px) / 1.75);
+  line-height: 1;
+  color: #1b1719;
 }
 
 .timeline-grid {
   display: grid;
-  gap: 10px;
+  gap: clamp(28px, 5vw, 44px);
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .timeline-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.72);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(22px, 3vw, 30px) minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(10px, 1.8vw, 16px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #191518;
+  font-family: "Poiret One", "Jost", "Manrope", sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: lowercase;
+  letter-spacing: 0.035em;
 }
 
 .timeline-time {
-  font-size: 13px;
-  color: var(--ash-rose);
-  font-weight: 700;
+  font-size: calc(clamp(32px, 7vw, 58px) / 1.75);
+  color: inherit;
+  white-space: nowrap;
+  justify-self: end;
+  text-align: right;
 }
 
 .timeline-title {
-  font-size: 27px;
-  margin: 4px 0;
+  font-size: calc(clamp(30px, 6.8vw, 56px) / 1.75);
+  justify-self: start;
+  text-align: left;
 }
 
-.timeline-desc {
-  color: var(--text-soft);
-  font-size: 14px;
+.timeline-sep {
+  display: block;
+  width: clamp(5px, 1vw, 8px);
+  height: clamp(5px, 1vw, 8px);
+  border-radius: 50%;
+  background: #000;
+  justify-self: center;
+}
+
+#timeline {
+  position: relative;
+  overflow: hidden;
+}
+
+#timeline.screen-block {
+  min-height: 98svh;
+  padding: 40px 0 46px;
+}
+
+#timeline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../фоточки/фоны/crumpled-paper-textu.jpg") center / cover no-repeat;
+  z-index: 0;
+}
+
+#timeline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.62);
+  z-index: 0;
+}
+
+#timeline .container {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 759px) {
+  #timeline.screen-block {
+    min-height: 122svh;
+    padding: 60px 0 86px;
+  }
+
+  .timeline-shell h2 {
+    margin-bottom: clamp(64px, 14vw, 96px);
+  }
+
+  .timeline-grid {
+    gap: clamp(34px, 8.5vw, 56px);
+    max-width: 420px;
+  }
+
+  .timeline-card {
+    grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
+    column-gap: 8px;
+  }
+
+  .timeline-time,
+  .timeline-title {
+    font-size: calc(clamp(32px, 9.2vw, 52px) / 1.75);
+  }
 }
 
 .video-bridge {
@@ -819,38 +976,214 @@ p {
 }
 
 .wishes-shell {
-  padding: 22px;
+  padding: clamp(30px, 6vw, 56px) 20px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#wishes {
+  position: relative;
+  overflow: hidden;
+}
+
+#wishes::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8% 12%, #ffffff 0%, #fbf7f8 34%, #f4ecef 68%, #efe6e9 100%);
+  z-index: 0;
+}
+
+#wishes .container {
+  position: relative;
+  z-index: 1;
+}
+
+.wishes-slider {
+  position: relative;
+  width: min(980px, 100%);
+  max-width: 980px;
+  margin: 0 auto;
   display: grid;
-  gap: 18px;
-  align-items: start;
+  justify-items: center;
+  gap: clamp(20px, 3.5vw, 36px);
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
-.wishes-copy {
-  display: grid;
-  gap: 10px;
-  align-content: start;
-}
-
-.wishes-copy p {
-  color: var(--text-soft);
-}
-
-.dresscode-text {
-  margin-top: 4px;
-}
-
-.dresscode-copy {
-  display: grid;
-  gap: 10px;
-}
-
-.dresscode-copy h3 {
+#wishes-title {
   margin: 0;
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(28px, 5vw, 42px);
+  max-width: 100%;
+  font-family: "Novelist", "Cormorant Garamond", serif;
+  font-size: calc(clamp(70px, 9vw, 122px) / 1.5);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: #1d171a;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.wishes-quote {
+  position: absolute;
+  top: clamp(8px, 2.1vw, 26px);
+  font-family: "Novelist", "Cormorant Garamond", serif;
+  font-size: clamp(120px, 15vw, 220px);
+  line-height: 0.65;
+  color: rgba(30, 23, 26, 0.08);
+  pointer-events: none;
+}
+
+.wishes-quote-left {
+  left: clamp(4px, 1vw, 12px);
+}
+
+.wishes-quote-right {
+  right: clamp(4px, 1vw, 12px);
+}
+
+.wishes-slide-text {
+  margin: 0;
+  width: min(780px, 100%);
+  max-width: 100%;
+  font-family: "Manrope", sans-serif;
+  font-size: calc(clamp(18px, 2.1vw, 31px) / 1.75);
+  font-weight: 300;
+  line-height: 1.38;
+  letter-spacing: 0.005em;
+  color: #1f1a1d;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  text-wrap: pretty;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.wishes-slide-text.is-fade-out {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.wishes-slide-text.is-fade-in {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.wishes-controls {
+  margin-top: clamp(6px, 1.6vw, 14px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 26px);
+}
+
+.wishes-nav {
+  width: clamp(42px, 4.2vw, 58px);
+  height: clamp(42px, 4.2vw, 58px);
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+  color: rgba(25, 20, 23, 0.7);
+  font-size: clamp(28px, 3.2vw, 44px);
   line-height: 1;
-  color: #fff;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  vertical-align: middle;
+  transform: translateY(-2px);
+  transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.wishes-prev {
+  border-radius: 999px;
+}
+
+.wishes-next {
+  border: 0;
+  border-radius: 6px;
+}
+
+.wishes-nav:hover {
+  color: rgba(25, 20, 23, 0.92);
+}
+
+.wishes-next:hover {
+  border-color: rgba(25, 20, 23, 0.85);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.wishes-indicator {
+  min-width: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Novelist", "Cormorant Garamond", serif;
+  font-size: clamp(22px, 2vw, 32px);
+  font-weight: 300;
+  line-height: 1;
+  color: rgba(25, 20, 23, 0.8);
+  letter-spacing: 0.02em;
+  transition: opacity 220ms ease;
+}
+
+.wishes-indicator.is-fade-out,
+.wishes-indicator.is-fade-in {
+  opacity: 0;
+}
+
+@media (max-width: 759px) {
+  .wishes-shell {
+    padding: 34px 16px;
+  }
+
+  .wishes-slider {
+    gap: 18px;
+    padding-inline: 8px;
+  }
+
+  #wishes-title {
+    font-size: clamp(40px, 10.5vw, 56px);
+    letter-spacing: 0.02em;
+    line-height: 1.02;
+    margin-top: 0;
+    padding-top: 4px;
+  }
+
+  .wishes-quote {
+    top: 26px;
+    font-size: clamp(84px, 24vw, 140px);
+  }
+
+  .wishes-slide-text {
+    width: min(560px, 100%);
+    font-size: clamp(16px, 4.9vw, 22px);
+    line-height: 1.34;
+    padding-inline: 0;
+    min-height: 7.4em;
+  }
+
+  .wishes-controls {
+    margin-top: 2px;
+    gap: 14px;
+  }
+
+  .wishes-nav {
+    width: 42px;
+    height: 42px;
+    font-size: 30px;
+    transform: translateY(-2px);
+  }
+
+  .wishes-indicator {
+    font-size: 24px;
+  }
 }
 
 .contacts-shell {
@@ -929,6 +1262,24 @@ p {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.9);
   background: rgba(0, 0, 0, 0.18);
+}
+
+#rsvp {
+  position: relative;
+  overflow: hidden;
+}
+
+#rsvp::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 8% 12%, #ffffff 0%, #fbf7f8 34%, #f4ecef 68%, #efe6e9 100%);
+  z-index: 0;
+}
+
+#rsvp .container {
+  position: relative;
+  z-index: 1;
 }
 
 .rsvp-shell {
@@ -1093,15 +1444,14 @@ fieldset.field {
   }
 
   .story-shell,
-  .location-shell,
-  .wishes-shell {
+  .location-shell {
     grid-template-columns: 1fr 1fr;
     align-items: center;
     padding: 28px;
   }
 
   .wishes-shell {
-    grid-template-rows: auto;
+    padding: clamp(36px, 4.2vw, 54px) 30px;
   }
 
   .story-left {
@@ -1126,7 +1476,7 @@ fieldset.field {
   }
 
   .timeline-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .countdown-shell {
@@ -1206,7 +1556,7 @@ fieldset.field {
   }
 
   .timeline-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   #timeline.screen-block {
@@ -1225,7 +1575,7 @@ fieldset.field {
   }
 
   .wishes-shell {
-    grid-template-columns: 1.1fr 0.9fr;
+    padding-inline: 36px;
   }
 }
 
