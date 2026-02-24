@@ -440,12 +440,13 @@
   };
 
   const initWishes = () => {
+    const sliderEl = byId("wishes-slider");
     const titleEl = byId("wishes-title");
     const textEl = byId("wishes-slide-text");
     const indicatorEl = byId("wishes-indicator");
     const prevBtn = byId("wishes-prev");
     const nextBtn = byId("wishes-next");
-    if (!titleEl || !textEl || !indicatorEl || !prevBtn || !nextBtn) return;
+    if (!sliderEl || !titleEl || !textEl || !indicatorEl || !prevBtn || !nextBtn) return;
 
     titleEl.textContent = "Пожелания";
 
@@ -461,6 +462,35 @@
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fadeOutMs = prefersReducedMotion ? 0 : 150;
     const fadeInMs = prefersReducedMotion ? 0 : 220;
+
+    const updateFixedTextHeight = () => {
+      const width = Math.round(textEl.getBoundingClientRect().width);
+      if (!width) return;
+
+      const probe = document.createElement("p");
+      probe.className = "wishes-slide-text";
+      probe.style.position = "absolute";
+      probe.style.visibility = "hidden";
+      probe.style.pointerEvents = "none";
+      probe.style.left = "0";
+      probe.style.top = "0";
+      probe.style.width = `${width}px`;
+      probe.style.minHeight = "0";
+      probe.style.transition = "none";
+      probe.style.opacity = "0";
+      sliderEl.appendChild(probe);
+
+      let maxHeight = 0;
+      slides.forEach((slide) => {
+        probe.textContent = slide;
+        maxHeight = Math.max(maxHeight, Math.ceil(probe.getBoundingClientRect().height));
+      });
+
+      probe.remove();
+      if (maxHeight > 0) {
+        sliderEl.style.setProperty("--wishes-text-height", `${maxHeight}px`);
+      }
+    };
 
     const render = () => {
       textEl.textContent = slides[index];
@@ -508,6 +538,11 @@
     });
 
     render();
+    window.requestAnimationFrame(updateFixedTextHeight);
+    window.addEventListener("resize", updateFixedTextHeight, { passive: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateFixedTextHeight).catch(() => {});
+    }
   };
 
   const initContacts = () => {

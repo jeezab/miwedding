@@ -1007,6 +1007,7 @@ p {
   max-width: 980px;
   margin: 0 auto;
   display: grid;
+  grid-template-rows: auto minmax(var(--wishes-text-height, auto), auto) auto;
   justify-items: center;
   gap: clamp(20px, 3.5vw, 36px);
   text-align: center;
@@ -1056,9 +1057,13 @@ p {
   line-height: 1.38;
   letter-spacing: 0.005em;
   color: #1f1a1d;
+  min-height: var(--wishes-text-height, 6.2em);
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+  text-align: justify;
+  text-align-last: center;
+  hyphens: auto;
   text-wrap: pretty;
   transition: opacity 240ms ease, transform 240ms ease;
 }
@@ -1097,6 +1102,7 @@ p {
   padding: 0;
   vertical-align: middle;
   transform: translateY(-2px);
+  -webkit-tap-highlight-color: transparent;
   transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease;
 }
 
@@ -1115,7 +1121,15 @@ p {
 
 .wishes-next:hover {
   border-color: rgba(25, 20, 23, 0.85);
-  background: rgba(255, 255, 255, 0.42);
+  background: transparent;
+}
+
+.wishes-nav:focus,
+.wishes-nav:focus-visible,
+.wishes-nav:active {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 .wishes-indicator {
@@ -1166,7 +1180,7 @@ p {
     font-size: clamp(16px, 4.9vw, 22px);
     line-height: 1.34;
     padding-inline: 0;
-    min-height: 7.4em;
+    min-height: var(--wishes-text-height, 7.8em);
   }
 
   .wishes-controls {
@@ -1188,6 +1202,24 @@ p {
 
 .contacts-shell {
   padding: 22px;
+}
+
+#contacts {
+  position: relative;
+  overflow: hidden;
+}
+
+#contacts::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../фоточки/шаржеланий.jpg") center / cover no-repeat;
+  z-index: 0;
+}
+
+#contacts .container {
+  position: relative;
+  z-index: 1;
 }
 
 .contacts-shell h2 {
