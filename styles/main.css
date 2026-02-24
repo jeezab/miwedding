@@ -507,9 +507,11 @@ p {
 }
 
 #story-title {
+  font-family: "Saint Amour Script", "Cormorant Garamond", serif;
+  font-weight: 400;
   white-space: nowrap;
   text-wrap: nowrap;
-  font-size: clamp(28px, 6.6vw, 64px);
+  font-size: clamp(80px, 20vw, 190px);
 }
 
 .story-media img {
@@ -527,6 +529,11 @@ p {
 
   #story #story-title {
     order: 1;
+    width: 100%;
+    margin-inline: auto;
+    text-align: center;
+    justify-self: center;
+    transform: translateX(clamp(20px, 6vw, 34px));
   }
 
   #story .story-media {
@@ -726,7 +733,7 @@ p {
   margin-bottom: clamp(48px, 8.5vw, 82px);
   text-align: center;
   text-transform: uppercase;
-  font-family: "Poiret One", "Jost", "Manrope", sans-serif;
+  font-family: "Novelist", "Cormorant Garamond", serif;
   font-weight: 400;
   letter-spacing: 0.11em;
   font-size: calc(clamp(54px, 11vw, 116px) / 1.75);
@@ -879,7 +886,7 @@ p {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../фоточки/лети ко мне.jpg") center top / cover no-repeat;
+  background: url("../фоточки/лети ко мне.jpg") 42% top / cover no-repeat;
   z-index: 0;
 }
 
@@ -1202,18 +1209,22 @@ p {
 
 .contacts-shell {
   padding: 22px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 #contacts {
   position: relative;
   overflow: hidden;
+  min-height: 100svh;
 }
 
 #contacts::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("../фоточки/шаржеланий.jpg") center / cover no-repeat;
+  background: url("../фоточки/шаржеланий.jpg") center center / cover no-repeat;
   z-index: 0;
 }
 
@@ -1603,7 +1614,7 @@ fieldset.field {
   }
 
   #countdown.countdown::before {
-    background-position: center 12%;
+    background-position: 60% 12%;
   }
 
   .wishes-shell {

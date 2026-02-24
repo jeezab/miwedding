@@ -383,7 +383,22 @@
   };
 
   const initStory = () => {
-    setText("story-title", config.storyTitle);
+    const titleEl = byId("story-title");
+    const rawTitle = String(config.storyTitle || "").trim();
+    if (titleEl) {
+      const words = rawTitle.split(/\s+/).filter(Boolean);
+      titleEl.textContent = "";
+      if (words.length > 1) {
+        const lastWord = words.pop();
+        titleEl.append(document.createTextNode(`${words.join(" ")} `));
+        const lastWordEl = document.createElement("span");
+        lastWordEl.className = "story-title-last";
+        lastWordEl.textContent = lastWord;
+        titleEl.appendChild(lastWordEl);
+      } else {
+        titleEl.textContent = rawTitle;
+      }
+    }
     setText("story-text", config.storyText);
   };
 
