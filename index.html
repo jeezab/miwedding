@@ -11,10 +11,19 @@
   <meta name="theme-color" content="#fffff0" />
   <title>Свадебное приглашение</title>
   <meta name="description" content="Свадебное приглашение" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400&family=Manrope:wght@400;500;600&family=Poiret+One&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/main.css?v=20260221-1" />
+  <script>
+    window.WEDDING_ASSET_VERSION = String(Date.now());
+  </script>
+  <script>
+    (function () {
+      var v = encodeURIComponent(window.WEDDING_ASSET_VERSION || String(Date.now()));
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "styles/main.css?v=" + v;
+      document.head.appendChild(link);
+    })();
+  </script>
+  <noscript><link rel="stylesheet" href="styles/main.css" /></noscript>
 </head>
 <body>
   <section class="intro-splash" id="intro-splash" role="dialog" aria-modal="true" aria-label="Заставка приглашения" tabindex="0">
@@ -37,8 +46,8 @@
 
   <main>
     <section class="screen-block hero reveal" id="hero">
-      <video class="hero-video-bg" autoplay muted loop playsinline preload="auto" poster="фоточки/фоны/фон1блок.jpg" aria-hidden="true">
-        <source src="фоточки/пицца побольше.mp4?v=20260221-1" type="video/mp4" />
+      <video class="hero-video-bg" muted loop playsinline preload="auto" poster="фоточки/фоны/фон1блок.jpg" aria-hidden="true">
+        <source data-src="фоточки/пицца%20побольше.mp4" type="video/mp4" />
       </video>
       <div class="hero-video-overlay" aria-hidden="true"></div>
       <div class="container">
@@ -55,7 +64,8 @@
           <div class="story-left">
             <div class="story-copy">
               <h2 id="story-title">Наша история</h2>
-              <p id="story-text">Мы любим друг друга и решили стать мужем и женой. Будем счастливы разделить этот день с вами.</p>
+              <p id="story-text">Мы готовимся к самому важному для нас событию — дню свадьбы!
+                                  Будем счастливы разделить этот день с самыми близкими людьми и надеемся увидеть вас среди гостей.</p>
             </div>
           </div>
           <div class="story-media">
@@ -183,8 +193,8 @@
               <label class="choice"><input type="checkbox" name="drinks" value="Коньяк" /> Коньяк</label>
             </fieldset>
             <div class="field">
-              <label for="wish">Пожелание молодоженам</label>
-              <textarea id="wish" name="wish" rows="3" placeholder="Ваши теплые слова"></textarea>
+              <label for="wish">Комментарий:</label>
+              <textarea id="wish" name="wish" rows="3" placeholder="Ваши тёплые слова"></textarea>
             </div>
             <div class="field honeypot" aria-hidden="true">
               <label for="company">Компания</label>
@@ -195,12 +205,25 @@
           </form>
         </div>
       </div>
-    </section>
+        </section>
         <section class="screen-block contacts reveal video-bridge-block" id="contacts">
           <div class="container">
-            <div class="contacts-shell panel">
-              <h2>Контакты</h2>
-              <div class="contacts-grid" id="contacts-grid"></div>
+            <div class="contacts-overlay">
+              <div class="contacts-dust" aria-hidden="true"></div>
+              <p class="contacts-heart" aria-hidden="true">♡</p>
+              <p class="contacts-lead">Если возникли вопросы</p>
+              <div class="contacts-list">
+                <article class="contact-person">
+                  <p class="contact-person-role"><a class="contact-name-link" href="https://t.me/mrrgosh" target="_blank" rel="noopener">Маргарита</a></p>
+                  <a class="contact-link" href="tel:+79858950932">+7 9858950932</a>
+                  <a class="contact-link" href="https://t.me/mrrgosh" target="_blank" rel="noopener">tg: @mrrgosh</a>
+                </article>
+                <article class="contact-person">
+                  <p class="contact-person-role"><a class="contact-name-link" href="https://t.me/jeezab" target="_blank" rel="noopener">Игорь</a></p>
+                  <a class="contact-link" href="tel:+79299151462">+7 9299151462</a>
+                  <a class="contact-link" href="https://t.me/jeezab" target="_blank" rel="noopener">tg: @jeezab</a>
+                </article>
+              </div>
             </div>
           </div>
         </section>
@@ -210,11 +233,30 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer-inner">С любовью, <span id="footer-names">Игорь и Маргарита</span></div>
+      <div class="footer-inner"><span class="footer-prefix">С любовью,</span> <span id="footer-names">Игорь и Маргарита</span></div>
     </div>
   </footer>
 
-  <script src="scripts/config.js?v=20260221-1"></script>
-  <script src="scripts/main.js?v=20260221-1"></script>
+  <script>
+    (function () {
+      var v = encodeURIComponent(window.WEDDING_ASSET_VERSION || String(Date.now()));
+      var load = function (src, done) {
+        var script = document.createElement("script");
+        script.src = src + "?v=" + v;
+        script.async = false;
+        if (typeof done === "function") {
+          script.onload = done;
+        }
+        document.body.appendChild(script);
+      };
+      load("scripts/config.js", function () {
+        load("scripts/main.js");
+      });
+    })();
+  </script>
+  <noscript>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/main.js"></script>
+  </noscript>
 </body>
 </html>

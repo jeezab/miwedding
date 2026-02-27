@@ -69,6 +69,7 @@
     if (!shouldShow) {
       splash.classList.add("is-hidden");
       splash.setAttribute("aria-hidden", "true");
+      window.dispatchEvent(new Event("wedding:intro-finished"));
       return;
     }
 
@@ -84,6 +85,7 @@
     if (!ctx) {
       splash.classList.add("is-hidden");
       document.body.classList.remove("intro-lock");
+      window.dispatchEvent(new Event("wedding:intro-finished"));
       return;
     }
 
@@ -287,6 +289,7 @@
       splash.setAttribute("aria-hidden", "true");
       document.body.classList.remove("intro-lock");
       if (!showEveryVisit) writeStorage(INTRO_SEEN_KEY, "1");
+      window.dispatchEvent(new Event("wedding:intro-finished"));
     };
 
     const startTransition = () => {
@@ -351,29 +354,71 @@
   const initHeroVideo = () => {
     const video = document.querySelector(".hero-video-bg");
     if (!video) return;
+    const splash = byId("intro-splash");
+    let hasStartedPlayback = false;
+    const assetVersion = encodeURIComponent(window.WEDDING_ASSET_VERSION || String(Date.now()));
+    const sourceEl = video.querySelector("source");
+
+    if (sourceEl) {
+      const sourceBase = sourceEl.getAttribute("data-src") || sourceEl.getAttribute("src") || "";
+      if (sourceBase) {
+        const sep = sourceBase.includes("?") ? "&" : "?";
+        sourceEl.src = `${sourceBase}${sep}v=${assetVersion}`;
+      }
+    }
+
+    const posterBase = video.getAttribute("poster");
+    if (posterBase) {
+      const sep = posterBase.includes("?") ? "&" : "?";
+      video.poster = `${posterBase}${sep}v=${assetVersion}`;
+    }
 
     const markReady = () => {
       video.classList.add("is-ready");
     };
 
-    const tryPlay = () => {
+    const startPlayback = () => {
+      if (hasStartedPlayback) return;
+      hasStartedPlayback = true;
+      video.currentTime = 0;
       const playPromise = video.play();
       if (playPromise && typeof playPromise.catch === "function") {
         playPromise.catch(() => {});
       }
     };
 
-    if (video.readyState >= 2) {
+    const ensureLoaded = () => {
+      video.preload = "auto";
+      if (video.readyState < 2) {
+        video.load();
+      }
+    };
+
+    if (video.readyState >= 1) {
       markReady();
     } else {
+      video.addEventListener("loadedmetadata", markReady, { once: true });
       video.addEventListener("loadeddata", markReady, { once: true });
       video.addEventListener("canplay", markReady, { once: true });
     }
 
-    tryPlay();
+    ensureLoaded();
+
+    const introIsVisible = splash && !splash.classList.contains("is-hidden") && !splash.classList.contains("is-fading");
+    if (introIsVisible) {
+      video.pause();
+      video.currentTime = 0;
+      const onIntroFinished = () => {
+        startPlayback();
+        window.removeEventListener("wedding:intro-finished", onIntroFinished);
+      };
+      window.addEventListener("wedding:intro-finished", onIntroFinished);
+    } else {
+      startPlayback();
+    }
 
     const resumeOnGesture = () => {
-      tryPlay();
+      startPlayback();
       window.removeEventListener("touchstart", resumeOnGesture);
       window.removeEventListener("pointerdown", resumeOnGesture);
     };
@@ -784,6 +829,39 @@
     const firstDay = new Date(year, month, 1);
     const startWeekday = (firstDay.getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const heartEmojiPool = ["💗", "💖", "💞", "💕", "💘"];
+
+    const spawnHeartBurst = (originX, originY) => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const count = reducedMotion ? 8 : 22;
+      const minDistance = reducedMotion ? 34 : 56;
+      const maxDistance = reducedMotion ? 82 : 160;
+
+      for (let i = 0; i < count; i += 1) {
+        const node = document.createElement("span");
+        node.className = "calendar-heart-pop";
+        node.textContent = heartEmojiPool[Math.floor(Math.random() * heartEmojiPool.length)];
+        node.style.left = `${originX}px`;
+        node.style.top = `${originY}px`;
+
+        const angle = ((i / count) * Math.PI * 2) + (Math.random() * 0.45 - 0.225);
+        const distance = minDistance + Math.random() * (maxDistance - minDistance);
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance - (reducedMotion ? 6 : 18);
+        const scale = 0.7 + Math.random() * 0.9;
+        const rotate = `${Math.round((Math.random() * 2 - 1) * 66)}deg`;
+        const duration = `${Math.round((reducedMotion ? 560 : 760) + Math.random() * 360)}ms`;
+
+        node.style.setProperty("--dx", `${dx.toFixed(1)}px`);
+        node.style.setProperty("--dy", `${dy.toFixed(1)}px`);
+        node.style.setProperty("--heart-scale", scale.toFixed(2));
+        node.style.setProperty("--heart-rot", rotate);
+        node.style.animationDuration = duration;
+
+        document.body.appendChild(node);
+        node.addEventListener("animationend", () => node.remove(), { once: true });
+      }
+    };
 
     grid.innerHTML = "";
     for (let i = 0; i < startWeekday; i += 1) {
@@ -795,7 +873,26 @@
       const cell = document.createElement("span");
       cell.textContent = String(day);
       cell.classList.add("in-month");
-      if (day === eventDay) cell.classList.add("is-event");
+      if (day === eventDay) {
+        cell.classList.add("is-event", "calendar-event-trigger");
+        cell.setAttribute("role", "button");
+        cell.setAttribute("tabindex", "0");
+        cell.setAttribute("aria-label", "Пасхалка: нажмите, чтобы запустить сердечки");
+
+        const triggerBurst = () => {
+          const rect = cell.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height * 0.52;
+          spawnHeartBurst(centerX, centerY);
+        };
+
+        cell.addEventListener("click", triggerBurst);
+        cell.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          triggerBurst();
+        });
+      }
       grid.appendChild(cell);
     }
   };
