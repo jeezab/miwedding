@@ -32,7 +32,7 @@ window.WEDDING_CONFIG = {
   timelineItems: [
     { time: "15:30", title: "сбор гостей", description: "" },
     { time: "16:00", title: "банкет", description: "" },
-    { time: "21:00", title: "свадебный торт", description: "" },
+    { time: "21:30", title: "свадебный торт", description: "" },
     { time: "23:00", title: "завершение вечера", description: "" }
   ],
   dressCodeColors: [
