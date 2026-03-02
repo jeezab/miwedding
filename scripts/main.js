@@ -966,7 +966,6 @@
     const deadline = byId("rsvp-deadline");
     const button = byId("rsvp-submit");
     const guestNameInput = byId("guestName");
-    const wishInput = byId("wish");
     const attendanceInputs = Array.from(form ? form.querySelectorAll("input[name='attendance']") : []);
     const drinkInputs = Array.from(form ? form.querySelectorAll("input[name='drinks']") : []);
     const noneDrinkInput = drinkInputs.find((input) => input.value === "Не пью") || null;
@@ -984,7 +983,21 @@
       if (choice) choice.classList.toggle("is-disabled", disabled);
     };
 
+    const getAttendanceValue = () => {
+      const selected = attendanceInputs.find((input) => input.checked);
+      return selected ? String(selected.value || "").trim() : "";
+    };
+
     const syncDrinksState = () => {
+      const attendance = getAttendanceValue();
+      if (attendance === "no") {
+        drinkInputs.forEach((input) => {
+          input.checked = false;
+          setChoiceDisabled(input, true);
+        });
+        return;
+      }
+
       if (!noneDrinkInput) return;
       const hasOtherSelected = otherDrinkInputs.some((input) => input.checked);
       if (noneDrinkInput.checked) {
@@ -1008,9 +1021,12 @@
     const isFormComplete = () => {
       const hasName = !!(guestNameInput && guestNameInput.value.trim());
       const hasAttendance = attendanceInputs.some((input) => input.checked);
+      const attendance = getAttendanceValue();
+      if (!hasName || !hasAttendance) return false;
+      if (attendance === "no") return true;
+
       const hasDrinkChoice = drinkInputs.some((input) => input.checked);
-      const hasWish = !!(wishInput && wishInput.value.trim());
-      return hasName && hasAttendance && hasDrinkChoice && hasWish;
+      return hasDrinkChoice;
     };
 
     const syncSubmitState = () => {
@@ -1037,7 +1053,7 @@
 
       syncDrinksState();
       if (!isFormComplete()) {
-        status.textContent = "Пожалуйста, заполните все поля анкеты.";
+        status.textContent = "Пожалуйста, заполните обязательные поля анкеты.";
         syncSubmitState();
         return;
       }
