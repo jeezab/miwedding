@@ -11,9 +11,28 @@
   <meta name="theme-color" content="#fffff0" />
   <title>Свадебное приглашение</title>
   <meta name="description" content="Свадебное приглашение" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon.svg" />
   <script>
     window.WEDDING_ASSET_VERSION = String(Date.now());
   </script>
+  <script>
+    document.documentElement.classList.add("is-booting");
+    window.setTimeout(function () {
+      document.documentElement.classList.remove("is-booting");
+    }, 5000);
+  </script>
+  <style>
+    html.is-booting body {
+      background: #090b12;
+    }
+    html.is-booting .page-bg,
+    html.is-booting main,
+    html.is-booting .footer {
+      opacity: 0;
+      visibility: hidden;
+    }
+  </style>
   <script>
     (function () {
       var v = encodeURIComponent(window.WEDDING_ASSET_VERSION || String(Date.now()));

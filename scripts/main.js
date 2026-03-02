@@ -1139,17 +1139,30 @@
     elements.forEach((el) => observer.observe(el));
   };
 
-  initIntro();
-  initHero();
-  initHeroVideo();
-  initStory();
-  initDate();
-  initLocation();
-  initTimeline();
-  initWishes();
-  initContacts();
-  initCalendar();
-  initCountdown();
-  initRSVP();
-  initReveal();
+  const bootSteps = [
+    initIntro,
+    initHero,
+    initHeroVideo,
+    initStory,
+    initDate,
+    initLocation,
+    initTimeline,
+    initWishes,
+    initContacts,
+    initCalendar,
+    initCountdown,
+    initRSVP,
+    initReveal
+  ];
+
+  bootSteps.forEach((step) => {
+    try {
+      step();
+    } catch (err) {
+      // Keep boot resilient: one failed widget should not block the whole page.
+      console.error("[wedding:init]", err);
+    }
+  });
+
+  document.documentElement.classList.remove("is-booting");
 })();
